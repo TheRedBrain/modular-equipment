@@ -9,6 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public class ItemRegistry {
@@ -76,11 +77,13 @@ public class ItemRegistry {
 									new BladeModulesComponent.BladeModules(
 											DIAMOND_SHORT_SWORD_BLADE.getDefaultInstance(),
 											COPPER_STRAIGHT_CROSS_GUARD.getDefaultInstance(),
-											IRON_ROUND_POMMEL.getDefaultInstance()
+											IRON_ROUND_POMMEL.getDefaultInstance(),
+											ItemStack.EMPTY
 									),
 									Tags.ONE_HANDED_BLADES,
 									Tags.ONE_HANDED_CROSS_GUARDS,
 									Tags.ONE_HANDED_POMMELS,
+									Tags.ONE_HANDED_GRIPS,
 									0
 							)
 					)
