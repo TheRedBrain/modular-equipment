@@ -1,8 +1,8 @@
 package com.github.theredbrain.modularequipment;
 
-import com.github.theredbrain.modularequipment.component.type.OneHandedBladeModulesComponent;
-import com.github.theredbrain.modularequipment.registry.ItemComponentRegistry;
-import com.github.theredbrain.modularequipment.registry.ItemGroupRegistry;
+import com.github.theredbrain.modularequipment.component.type.BladeModulesComponent;
+import com.github.theredbrain.modularequipment.registry.DataComponentTypeRegistry;
+import com.github.theredbrain.modularequipment.registry.CreativeModeTabRegistry;
 import com.github.theredbrain.modularequipment.registry.ItemRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.core.component.DataComponentType;
@@ -14,15 +14,15 @@ public class ModularEquipment implements ModInitializer {
 	public static final String MOD_ID = "modularequipment";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	public static DataComponentType<OneHandedBladeModulesComponent> ONE_HANDED_BLADE_MODULES;
+	public static DataComponentType<BladeModulesComponent> BLADE_MODULES;
 
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Initializing Modular Equipment!");
 
 		// Registry
-		ItemComponentRegistry.init();
-		ItemGroupRegistry.init();
+		DataComponentTypeRegistry.init();
+		CreativeModeTabRegistry.init();
 		ItemRegistry.init();
 	}
 

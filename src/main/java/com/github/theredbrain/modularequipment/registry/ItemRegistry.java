@@ -13,7 +13,10 @@ import org.jetbrains.annotations.Nullable;
 public class ItemRegistry {
 
 	public static ResourceKey<Item> ONE_HANDED_BLADE_WEAPON_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("one_handed_blade_weapon"));
-	public static final Item ONE_HANDED_BLADE_WEAPON = registerItem(ONE_HANDED_BLADE_WEAPON_KEY, new Item(new Item.Properties().setId(ONE_HANDED_BLADE_WEAPON_KEY).stacksTo(1)), ItemGroupRegistry.MODULAR_EQUIPMENT_KEY);
+	public static final Item ONE_HANDED_BLADE_WEAPON = registerItem(ONE_HANDED_BLADE_WEAPON_KEY, new Item(
+			new Item.Properties().setId(ONE_HANDED_BLADE_WEAPON_KEY)
+					.stacksTo(1)
+	), CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY);
 
 	private static Item registerItem(ResourceKey<Item> key, Item item, @Nullable ResourceKey<CreativeModeTab> itemGroup) {
 

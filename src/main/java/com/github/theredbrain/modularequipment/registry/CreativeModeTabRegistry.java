@@ -11,7 +11,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-public class ItemGroupRegistry {
+public class CreativeModeTabRegistry {
 
 	public static final ResourceKey<CreativeModeTab> MODULAR_EQUIPMENT_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB, ModularEquipment.identifier("modular_equipment"));
 	public static final CreativeModeTab MODULAR_EQUIPMENT = FabricItemGroup.builder()
