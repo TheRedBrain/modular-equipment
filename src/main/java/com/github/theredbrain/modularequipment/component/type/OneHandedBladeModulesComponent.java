@@ -2,7 +2,7 @@ package com.github.theredbrain.modularequipment.component.type;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public record OneHandedBladeModulesComponent(
 		ItemStack blade_component,
