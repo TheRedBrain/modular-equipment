@@ -1,6 +1,8 @@
 plugins {
-	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
-	id 'maven-publish'
+	id 'fabric-loom' version "${loom_version}"
+	id "com.matthewprenger.cursegradle" version "1.4.0"
+	id "com.github.breadmoirai.github-release" version "2.4.1"
+	id "com.modrinth.minotaur" version "2.+"
 }
 
 version = project.mod_version
@@ -22,7 +24,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"modid" {
+		"modularequipment" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
@@ -33,19 +35,21 @@ loom {
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
+//	mappings loom.officialMojangMappings()
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 	
 }
 
 processResources {
 	inputs.property "version", project.version
+	filteringCharset "UTF-8"
 
 	filesMatching("fabric.mod.json") {
-		expand "version": inputs.properties.version
+		expand(project.properties)
 	}
 }
 
@@ -71,20 +75,95 @@ jar {
 	}
 }
 
-// configure the maven publication
-publishing {
-	publications {
-		create("mavenJava", MavenPublication) {
-			artifactId = project.archives_base_name
-			from components.java
+ext.changelog_last_section = { ->
+	return new File("CHANGELOG.md").text.split('\n# ')[0]
+}
+
+if(project.hasProperty('release_type')) {
+	tasks.register("publishMod") {
+		dependsOn(build)
+		finalizedBy(tasks.curseforge)
+		finalizedBy(tasks.modrinth)
+		finalizedBy(tasks.githubRelease)
+	}
+
+	curseforge {
+		apiKey = System.getenv("CURSEFORGE_API_KEY")
+		project {
+			id = System.getenv("CURSEFORGE_PROJECT_ID")
+			changelog = changelog_last_section()
+			changelogType = 'markdown'
+			releaseType = release_type
+			addGameVersion "${project.minecraft_version}"
+			addGameVersion "Fabric"
+
+			relations {
+				// TODO
+				requiredDependency 'fzzy-config'
+				requiredDependency 'fabric-api'
+				requiredDependency 'slot-customization-api'
+				optionalDependency 'trinkets'
+				optionalDependency 'stamina-attributes'
+				optionalDependency 'inventory-size-attributes'
+				optionalDependency 'backpack-attribute'
+				optionalDependency 'player-attribute-screen'
+				optionalDependency 'rpg-crafting'
+			}
+
+			mainArtifact(remapJar)
+			afterEvaluate {
+				uploadTask.dependsOn(remapJar)
+			}
+			options {
+				forgeGradleIntegration = false
+			}
 		}
 	}
 
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
+	modrinth {
+		token = System.getenv("MODRINTH_API_KEY")
+		projectId = System.getenv("MODRINTH_PROJECT_ID") // This can be the project ID or the slug. Either will work!
+		versionName = "${version}" // You don't need to set this manually. Will fail if Modrinth has this version already
+		versionNumber = "${version}" // You don't need to set this manually. Will fail if Modrinth has this version already
+		versionType = release_type // This is the default -- can also be `beta` or `alpha`
+		uploadFile = remapJar // With Loom, this MUST be set to `remapJar` instead of `jar`!
+		gameVersions = ["${project.minecraft_version}"] // Must be an array, even with only one version
+		loaders = ["fabric"] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
+		changelog = changelog_last_section()
+		dependencies { // A special DSL for creating dependencies
+			// scope.type
+			// The scope can be `required`, `optional`, `incompatible`, or `embedded`
+			// The type can either be `project` or `version`
+			// TODO
+			required.project 'fzzy-config'
+			required.project 'fabric-api'
+			required.project 'slot-customization-api'
+			optional.project 'trinkets'
+			optional.project 'stamina-attributes'
+			optional.project 'various-status-effects'
+			optional.project 'inventory-size-attributes'
+			optional.project 'backpack-attribute'
+			optional.project 'player-attribute-screen'
+			optional.project 'rpg-crafting'
+		}
+	}
+
+	githubRelease {
+		token System.getenv("GH_API_KEY") // This is your personal access token with Repo permissions
+		owner System.getenv("GH_OWNER") // default is the last part of your group. Eg group: "com.github.breadmoirai" => owner: "breadmoirai"
+		repo System.getenv("GH_REPO") // by default this is set to your project name
+		tagName "${version}" // by default this is set to "v${project.version}"
+		targetCommitish "${project.minecraft_version}" // by default this is set to "main"
+		releaseName "Release" // Release title, by default this is the same as the tagName
+		generateReleaseNotes false // Generate release notes automatically, if true and body is present, body will be pre-pended, if name is not given, one will be generated by the tag
+		// body.set "" // by default this is empty
+		draft false // by default this is true
+		prerelease release_type != "release" // by default this is false
+		// releaseAssets jar.destinationDir.listFiles // this points to which files you want to upload as assets with your release, by default this is empty
+		allowUploadToExisting false // Setting this to true will allow this plugin to upload artifacts to a release if it found an existing one. If overwrite is set to true, this option is ignored.
+		overwrite false // by default false; if set to true, will delete an existing release with the same tag and name
+		// dryRun true // by default false; you can use this to see what actions would be taken without making a release
+		apiEndpoint "https://api.github.com" // should only change for github enterprise users
+		client // This is the okhttp client used for http requests
 	}
 }

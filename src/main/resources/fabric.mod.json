@@ -1,41 +1,36 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
+	"id": "modularequipment",
 	"version": "${version}",
-	"name": "Example mod",
+	"name": "Modular Equipment",
 	"description": "This is an example description! Tell everyone what your mod is about!",
 	"authors": [
-		"Me!"
+		"TheRedBrain"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/TheRedBrain/modular-equipment"
 	},
-	"license": "CC0-1.0",
-	"icon": "assets/modid/icon.png",
+	"license": "MIT",
+	"icon": "assets/modularequipment/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.example.ExampleMod"
+			"com.github.theredbrain.modularequipment.ModularEquipment"
 		],
 		"client": [
-			"com.example.ExampleModClient"
+			"com.github.theredbrain.modularequipment.ModularEquipmentClient"
 		]
 	},
 	"mixins": [
-		"modid.mixins.json",
+      "modularequipment.mixins.json",
 		{
-			"config": "modid.client.mixins.json",
+			"config": "modularequipment.client.mixins.json",
 			"environment": "client"
 		}
 	],
 	"depends": {
-		"fabricloader": ">=0.18.2",
-		"minecraft": "~1.21.11",
-		"java": ">=21",
+		"minecraft": "${minecraft_version}",
+		"fabricloader": ">=${loader_version}",
 		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
 	}
 }
