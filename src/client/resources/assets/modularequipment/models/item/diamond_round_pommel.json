@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "modularequipment:item/diamond_round_pommel"
+  }
+}
