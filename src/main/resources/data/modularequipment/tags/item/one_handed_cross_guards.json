@@ -2,6 +2,10 @@
   "values": [
     "modularequipment:copper_straight_cross_guard",
     "modularequipment:diamond_straight_cross_guard",
-    "modularequipment:iron_straight_cross_guard"
+    "modularequipment:golden_straight_cross_guard",
+    "modularequipment:iron_straight_cross_guard",
+    "modularequipment:netherite_straight_cross_guard",
+    "modularequipment:stone_straight_cross_guard",
+    "modularequipment:wooden_straight_cross_guard"
   ]
 }

@@ -2,6 +2,10 @@
   "values": [
     "modularequipment:copper_short_sword_blade",
     "modularequipment:diamond_short_sword_blade",
-    "modularequipment:iron_short_sword_blade"
+    "modularequipment:golden_short_sword_blade",
+    "modularequipment:iron_short_sword_blade",
+    "modularequipment:netherite_short_sword_blade",
+    "modularequipment:stone_short_sword_blade",
+    "modularequipment:wooden_short_sword_blade"
   ]
 }

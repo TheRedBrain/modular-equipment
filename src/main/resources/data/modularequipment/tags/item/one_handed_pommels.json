@@ -2,6 +2,10 @@
   "values": [
     "modularequipment:copper_round_pommel",
     "modularequipment:diamond_round_pommel",
-    "modularequipment:iron_round_pommel"
+    "modularequipment:golden_round_pommel",
+    "modularequipment:iron_round_pommel",
+    "modularequipment:netherite_round_pommel",
+    "modularequipment:stone_round_pommel",
+    "modularequipment:wooden_round_pommel"
   ]
 }
