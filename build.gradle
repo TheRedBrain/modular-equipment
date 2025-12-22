@@ -13,11 +13,22 @@ base {
 }
 
 repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
+
+	// Slot Customization API
+	maven {
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
+		content {
+			includeGroup "maven.modrinth"
+		}
+	}
+
+	// Fzzy Config
+	maven {
+		name = "FzzyMaven"
+		url = "https://maven.fzzyhmstrs.me/"
+	}
+
 }
 
 loom {
@@ -40,7 +51,13 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-	
+
+	// Slot Customization API
+	modImplementation "maven.modrinth:slot-customization-api:${project.slot_customization_api_version}"
+
+	// Fzzy Config
+	modImplementation"me.fzzyhmstrs:fzzy_config:${project.fzzy_config_version}"
+
 }
 
 processResources {
@@ -97,16 +114,10 @@ if(project.hasProperty('release_type')) {
 			addGameVersion "Fabric"
 
 			relations {
-				// TODO
 				requiredDependency 'fzzy-config'
 				requiredDependency 'fabric-api'
 				requiredDependency 'slot-customization-api'
-				optionalDependency 'trinkets'
-				optionalDependency 'stamina-attributes'
 				optionalDependency 'inventory-size-attributes'
-				optionalDependency 'backpack-attribute'
-				optionalDependency 'player-attribute-screen'
-				optionalDependency 'rpg-crafting'
 			}
 
 			mainArtifact(remapJar)
@@ -133,17 +144,10 @@ if(project.hasProperty('release_type')) {
 			// scope.type
 			// The scope can be `required`, `optional`, `incompatible`, or `embedded`
 			// The type can either be `project` or `version`
-			// TODO
 			required.project 'fzzy-config'
 			required.project 'fabric-api'
 			required.project 'slot-customization-api'
-			optional.project 'trinkets'
-			optional.project 'stamina-attributes'
-			optional.project 'various-status-effects'
 			optional.project 'inventory-size-attributes'
-			optional.project 'backpack-attribute'
-			optional.project 'player-attribute-screen'
-			optional.project 'rpg-crafting'
 		}
 	}
 

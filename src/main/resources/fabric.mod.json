@@ -31,6 +31,7 @@
 	"depends": {
 		"minecraft": "${minecraft_version}",
 		"fabricloader": ">=${loader_version}",
-		"fabric-api": "*"
+		"fabric-api": "*",
+		"slotcustomizationapi": ">=${slot_customization_api_version}"
 	}
 }
