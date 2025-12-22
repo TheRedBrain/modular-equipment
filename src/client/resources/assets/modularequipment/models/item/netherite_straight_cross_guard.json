@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "modularequipment:item/netherite_straight_cross_guard"
+  }
+}

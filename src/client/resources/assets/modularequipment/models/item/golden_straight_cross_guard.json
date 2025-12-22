@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "modularequipment:item/golden_straight_cross_guard"
+  }
+}

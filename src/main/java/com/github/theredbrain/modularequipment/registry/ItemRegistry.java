@@ -51,6 +51,24 @@ public class ItemRegistry {
 					.stacksTo(1)
 	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
 
+	public static ResourceKey<Item> GOLDEN_SHORT_SWORD_BLADE_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("golden_short_sword_blade"));
+	public static final Item GOLDEN_SHORT_SWORD_BLADE = registerItem(GOLDEN_SHORT_SWORD_BLADE_KEY, new Item(
+			new Item.Properties().setId(GOLDEN_SHORT_SWORD_BLADE_KEY)
+					.stacksTo(1)
+	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
+
+	public static ResourceKey<Item> GOLDEN_STRAIGHT_CROSS_GUARD_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("golden_straight_cross_guard"));
+	public static final Item GOLDEN_STRAIGHT_CROSS_GUARD = registerItem(GOLDEN_STRAIGHT_CROSS_GUARD_KEY, new Item(
+			new Item.Properties().setId(GOLDEN_STRAIGHT_CROSS_GUARD_KEY)
+					.stacksTo(1)
+	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
+
+	public static ResourceKey<Item> GOLDEN_ROUND_POMMEL_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("golden_round_pommel"));
+	public static final Item GOLDEN_ROUND_POMMEL = registerItem(GOLDEN_ROUND_POMMEL_KEY, new Item(
+			new Item.Properties().setId(GOLDEN_ROUND_POMMEL_KEY)
+					.stacksTo(1)
+	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
+
 	public static ResourceKey<Item> IRON_SHORT_SWORD_BLADE_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("iron_short_sword_blade"));
 	public static final Item IRON_SHORT_SWORD_BLADE = registerItem(IRON_SHORT_SWORD_BLADE_KEY, new Item(
 			new Item.Properties().setId(IRON_SHORT_SWORD_BLADE_KEY)
@@ -66,6 +84,43 @@ public class ItemRegistry {
 	public static ResourceKey<Item> IRON_ROUND_POMMEL_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("iron_round_pommel"));
 	public static final Item IRON_ROUND_POMMEL = registerItem(IRON_ROUND_POMMEL_KEY, new Item(
 			new Item.Properties().setId(IRON_ROUND_POMMEL_KEY)
+					.stacksTo(1)
+	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
+
+	public static ResourceKey<Item> NETHERITE_ONE_HANDED_BLADE_WEAPON_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("netherite_one_handed_blade_weapon"));
+	public static final Item NETHERITE_ONE_HANDED_BLADE_WEAPON = registerItem(NETHERITE_ONE_HANDED_BLADE_WEAPON_KEY, new Item(
+			new Item.Properties().setId(NETHERITE_ONE_HANDED_BLADE_WEAPON_KEY)
+					.stacksTo(1)
+					.component(ModularEquipment.MODULAR_BLADE,
+							new ModularBladeComponent(
+									new ModularBladeComponent.BladeModules(
+											ItemStack.EMPTY,
+											ItemStack.EMPTY,
+											ItemStack.EMPTY
+									),
+									Tags.ONE_HANDED_BLADES,
+									Tags.ONE_HANDED_CROSS_GUARDS,
+									Tags.ONE_HANDED_POMMELS,
+									0
+							)
+					)
+	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
+
+	public static ResourceKey<Item> NETHERITE_SHORT_SWORD_BLADE_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("netherite_short_sword_blade"));
+	public static final Item NETHERITE_SHORT_SWORD_BLADE = registerItem(NETHERITE_SHORT_SWORD_BLADE_KEY, new Item(
+			new Item.Properties().setId(NETHERITE_SHORT_SWORD_BLADE_KEY)
+					.stacksTo(1)
+	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
+
+	public static ResourceKey<Item> NETHERITE_STRAIGHT_CROSS_GUARD_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("netherite_straight_cross_guard"));
+	public static final Item NETHERITE_STRAIGHT_CROSS_GUARD = registerItem(NETHERITE_STRAIGHT_CROSS_GUARD_KEY, new Item(
+			new Item.Properties().setId(NETHERITE_STRAIGHT_CROSS_GUARD_KEY)
+					.stacksTo(1)
+	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
+
+	public static ResourceKey<Item> NETHERITE_ROUND_POMMEL_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("netherite_round_pommel"));
+	public static final Item NETHERITE_ROUND_POMMEL = registerItem(NETHERITE_ROUND_POMMEL_KEY, new Item(
+			new Item.Properties().setId(NETHERITE_ROUND_POMMEL_KEY)
 					.stacksTo(1)
 	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
 
@@ -88,42 +143,40 @@ public class ItemRegistry {
 					)
 	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
 
-	public static ResourceKey<Item> GOLDEN_ONE_HANDED_BLADE_WEAPON_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("golden_one_handed_blade_weapon"));
-	public static final Item GOLDEN_ONE_HANDED_BLADE_WEAPON = registerItem(GOLDEN_ONE_HANDED_BLADE_WEAPON_KEY, new Item(
-			new Item.Properties().setId(GOLDEN_ONE_HANDED_BLADE_WEAPON_KEY)
+	public static ResourceKey<Item> STONE_SHORT_SWORD_BLADE_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("stone_short_sword_blade"));
+	public static final Item STONE_SHORT_SWORD_BLADE = registerItem(STONE_SHORT_SWORD_BLADE_KEY, new Item(
+			new Item.Properties().setId(STONE_SHORT_SWORD_BLADE_KEY)
 					.stacksTo(1)
-					.component(ModularEquipment.MODULAR_BLADE,
-							new ModularBladeComponent(
-									new ModularBladeComponent.BladeModules(
-											ItemStack.EMPTY,
-											ItemStack.EMPTY,
-											ItemStack.EMPTY
-											),
-									Tags.ONE_HANDED_BLADES,
-									Tags.ONE_HANDED_CROSS_GUARDS,
-									Tags.ONE_HANDED_POMMELS,
-									0
-							)
-					)
 	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
 
-	public static ResourceKey<Item> NETHERITE_ONE_HANDED_BLADE_WEAPON_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("netherite_one_handed_blade_weapon"));
-	public static final Item NETHERITE_ONE_HANDED_BLADE_WEAPON = registerItem(NETHERITE_ONE_HANDED_BLADE_WEAPON_KEY, new Item(
-			new Item.Properties().setId(NETHERITE_ONE_HANDED_BLADE_WEAPON_KEY)
+	public static ResourceKey<Item> STONE_STRAIGHT_CROSS_GUARD_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("stone_straight_cross_guard"));
+	public static final Item STONE_STRAIGHT_CROSS_GUARD = registerItem(STONE_STRAIGHT_CROSS_GUARD_KEY, new Item(
+			new Item.Properties().setId(STONE_STRAIGHT_CROSS_GUARD_KEY)
 					.stacksTo(1)
-					.component(ModularEquipment.MODULAR_BLADE,
-							new ModularBladeComponent(
-									new ModularBladeComponent.BladeModules(
-											ItemStack.EMPTY,
-											ItemStack.EMPTY,
-											ItemStack.EMPTY
-											),
-									Tags.ONE_HANDED_BLADES,
-									Tags.ONE_HANDED_CROSS_GUARDS,
-									Tags.ONE_HANDED_POMMELS,
-									0
-							)
-					)
+	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
+
+	public static ResourceKey<Item> STONE_ROUND_POMMEL_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("stone_round_pommel"));
+	public static final Item STONE_ROUND_POMMEL = registerItem(STONE_ROUND_POMMEL_KEY, new Item(
+			new Item.Properties().setId(STONE_ROUND_POMMEL_KEY)
+					.stacksTo(1)
+	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
+
+	public static ResourceKey<Item> WOODEN_SHORT_SWORD_BLADE_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("wooden_short_sword_blade"));
+	public static final Item WOODEN_SHORT_SWORD_BLADE = registerItem(WOODEN_SHORT_SWORD_BLADE_KEY, new Item(
+			new Item.Properties().setId(WOODEN_SHORT_SWORD_BLADE_KEY)
+					.stacksTo(1)
+	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
+
+	public static ResourceKey<Item> WOODEN_STRAIGHT_CROSS_GUARD_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("wooden_straight_cross_guard"));
+	public static final Item WOODEN_STRAIGHT_CROSS_GUARD = registerItem(WOODEN_STRAIGHT_CROSS_GUARD_KEY, new Item(
+			new Item.Properties().setId(WOODEN_STRAIGHT_CROSS_GUARD_KEY)
+					.stacksTo(1)
+	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
+
+	public static ResourceKey<Item> WOODEN_ROUND_POMMEL_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("wooden_round_pommel"));
+	public static final Item WOODEN_ROUND_POMMEL = registerItem(WOODEN_ROUND_POMMEL_KEY, new Item(
+			new Item.Properties().setId(WOODEN_ROUND_POMMEL_KEY)
+					.stacksTo(1)
 	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
 
 	private static Item registerItem(ResourceKey<Item> key, Item item, List<ResourceKey<CreativeModeTab>> creativeModeTabList) {
