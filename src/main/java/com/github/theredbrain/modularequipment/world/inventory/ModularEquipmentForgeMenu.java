@@ -3,6 +3,8 @@ package com.github.theredbrain.modularequipment.world.inventory;
 import com.github.theredbrain.modularequipment.ModularEquipment;
 import com.github.theredbrain.modularequipment.component.type.ModularBladeComponent;
 import com.github.theredbrain.modularequipment.registry.MenuTypeRegistry;
+import com.github.theredbrain.slotcustomizationapi.api.SlotCustomization;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -12,6 +14,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.List;
 
 public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 
@@ -38,7 +42,7 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		this.addStandardInventorySlots(inventory, 8, 84);
 
 		// input slot
-		this.addSlot(new Slot(this.inputContainer, 0, 64, 8) {
+		this.addSlot(new Slot(this.inputContainer, 0, 80, 17) {
 
 			@Override
 			public boolean mayPlace(ItemStack itemStack) {
@@ -52,7 +56,7 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		});
 
 		// blades slot
-		this.addSlot(new ComponentSlot(this.componentsContainer, 0, 30, 40, EMPTY_SLOT_BLADE_COMPONENT) {
+		this.addSlot(new ComponentSlot(this.componentsContainer, 0, 134, 53, EMPTY_SLOT_BLADE_COMPONENT, List.of(Component.translatable("slot.tooltip.blade_weapon_blade"))) {
 
 			@Override
 			public boolean mayPlace(ItemStack itemStack) {
@@ -67,7 +71,7 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		});
 
 		// cross guard slot
-		this.addSlot(new ComponentSlot(this.componentsContainer, 1, 50, 40, EMPTY_SLOT_CROSS_GUARD_COMPONENT) {
+		this.addSlot(new ComponentSlot(this.componentsContainer, 1, 80, 53, EMPTY_SLOT_CROSS_GUARD_COMPONENT, List.of(Component.translatable("slot.tooltip.blade_weapon_cross_guard"))) {
 
 			@Override
 			public boolean mayPlace(ItemStack itemStack) {
@@ -82,7 +86,7 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		});
 
 		// pommel slot
-		this.addSlot(new ComponentSlot(this.componentsContainer, 2, 8, 40, EMPTY_SLOT_POMMEL_COMPONENT) {
+		this.addSlot(new ComponentSlot(this.componentsContainer, 2, 26, 53, EMPTY_SLOT_POMMEL_COMPONENT, List.of(Component.translatable("slot.tooltip.blade_weapon_pommel"))) {
 
 			@Override
 			public boolean mayPlace(ItemStack itemStack) {
@@ -97,7 +101,7 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		});
 
 		// result slot
-		this.addSlot(new Slot(this.resultContainer, 0, 77, 62) {
+		this.addSlot(new Slot(this.resultContainer, 0, 80, 17) {
 
 			@Override
 			public boolean mayPlace(ItemStack itemStack) {
@@ -106,9 +110,10 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 
 		});
 
-		// TODO Inventory Slot API stuff
-		// 	disable component slot
-		// 	tooltips
+		((SlotCustomization) this.slots.get(37)).slotcustomizationapi$setDisabledOverride(true);
+		((SlotCustomization) this.slots.get(38)).slotcustomizationapi$setDisabledOverride(true);
+		((SlotCustomization) this.slots.get(39)).slotcustomizationapi$setDisabledOverride(true);
+		((SlotCustomization) this.slots.get(40)).slotcustomizationapi$setDisabledOverride(true);
 
 	}
 
@@ -147,7 +152,10 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 			this.componentsContainer.setItem(0, modularBladeComponent.bladeModules().blade_component().copy());
 			this.componentsContainer.setItem(1, modularBladeComponent.bladeModules().cross_guard_component().copy());
 			this.componentsContainer.setItem(2, modularBladeComponent.bladeModules().pommel_component().copy());
-			// TODO disable input and enable result
+
+			((SlotCustomization) this.slots.get(37)).slotcustomizationapi$setDisabledOverride(false);
+			((SlotCustomization) this.slots.get(38)).slotcustomizationapi$setDisabledOverride(false);
+			((SlotCustomization) this.slots.get(39)).slotcustomizationapi$setDisabledOverride(false);
 		} else {
 			if (!this.componentsContainer.getItem(0).isEmpty()) {
 				this.componentsContainer.setItem(0, ItemStack.EMPTY);
@@ -158,6 +166,9 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 			if (!this.componentsContainer.getItem(2).isEmpty()) {
 				this.componentsContainer.setItem(2, ItemStack.EMPTY);
 			}
+			((SlotCustomization) this.slots.get(37)).slotcustomizationapi$setDisabledOverride(true);
+			((SlotCustomization) this.slots.get(38)).slotcustomizationapi$setDisabledOverride(true);
+			((SlotCustomization) this.slots.get(39)).slotcustomizationapi$setDisabledOverride(true);
 		}
 	}
 
@@ -174,6 +185,8 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 			resultStack.set(ModularEquipment.MODULAR_BLADE, builder.build());
 		}
 		this.resultContainer.setItem(0, resultStack);
+		((SlotCustomization) this.slots.get(36)).slotcustomizationapi$setDisabledOverride(true);
+		((SlotCustomization) this.slots.get(40)).slotcustomizationapi$setDisabledOverride(false);
 	}
 
 	private void clearInputAndComponentSlots() {
@@ -190,7 +203,11 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 			if (!this.componentsContainer.getItem(2).isEmpty()) {
 				this.componentsContainer.setItem(2, ItemStack.EMPTY);
 			}
-			// TODO enable input and disable result
+			((SlotCustomization) this.slots.get(36)).slotcustomizationapi$setDisabledOverride(false);
+			((SlotCustomization) this.slots.get(37)).slotcustomizationapi$setDisabledOverride(true);
+			((SlotCustomization) this.slots.get(38)).slotcustomizationapi$setDisabledOverride(true);
+			((SlotCustomization) this.slots.get(39)).slotcustomizationapi$setDisabledOverride(true);
+			((SlotCustomization) this.slots.get(40)).slotcustomizationapi$setDisabledOverride(true);
 		}
 	}
 
@@ -207,9 +224,10 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 	static class ComponentSlot extends Slot {
 		Identifier emptySlotIcon;
 
-		public ComponentSlot(Container container, int i, int x, int y, Identifier emptySlotIcon) {
+		public ComponentSlot(Container container, int i, int x, int y, Identifier emptySlotIcon, List<Component> tooltip) {
 			super(container, i, x, y);
 			this.emptySlotIcon = emptySlotIcon;
+			((SlotCustomization) this).slotcustomizationapi$setSlotTooltipText(tooltip);
 		}
 
 		@Override

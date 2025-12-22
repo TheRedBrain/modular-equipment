@@ -1,0 +1,7 @@
+{
+  "container.modular_equipment_forge": "Equipment Forge",
+
+  "slot.tooltip.blade_weapon_blade": "Blade",
+  "slot.tooltip.blade_weapon_cross_guard": "Cross Guard",
+  "slot.tooltip.blade_weapon_pommel": "Pommel"
+}
