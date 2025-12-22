@@ -82,7 +82,7 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		});
 
 		// pommel slot
-		this.addSlot(new ComponentSlot(this.componentsContainer, 3, 8, 40, EMPTY_SLOT_POMMEL_COMPONENT) {
+		this.addSlot(new ComponentSlot(this.componentsContainer, 2, 8, 40, EMPTY_SLOT_POMMEL_COMPONENT) {
 
 			@Override
 			public boolean mayPlace(ItemStack itemStack) {
