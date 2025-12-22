@@ -17,7 +17,7 @@ public class DataComponentTypeRegistry {
 		);
 		ModularEquipment.MODULAR_SHAFT_WEAPON = Registry.register(
 				BuiltInRegistries.DATA_COMPONENT_TYPE,
-				ModularEquipment.identifier("modular_blade_weapon"),
+				ModularEquipment.identifier("modular_shaft_weapon"),
 				DataComponentType.<ModularShaftWeaponDataComponent>builder().persistent(ModularShaftWeaponDataComponent.CODEC).networkSynchronized(ModularShaftWeaponDataComponent.STREAM_CODEC).build()
 		);
 		ModularEquipment.MODULAR_WEAPON_MODULE = Registry.register(

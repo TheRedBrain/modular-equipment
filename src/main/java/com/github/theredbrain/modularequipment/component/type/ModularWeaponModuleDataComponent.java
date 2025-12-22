@@ -13,19 +13,25 @@ import java.util.List;
 public record ModularWeaponModuleDataComponent(
 		String weapon_attribute_identifier,
 		List<String> spell_identifier_list,
-		List<AttributeModifier> attribute_modifier_list
+		List<AttributeModifier> attribute_modifier_list,
+		int additional_item_damage_per_attack,
+		float additional_seconds_to_disable_blocking
 ) {
 	public static final ModularWeaponModuleDataComponent DEFAULT = new ModularWeaponModuleDataComponent(
 			"",
 			new ArrayList<>(),
-			new ArrayList<>()
+			new ArrayList<>(),
+			0,
+			0.0F
 	);
 	public static final Codec<ModularWeaponModuleDataComponent> CODEC = RecordCodecBuilder.create(
 			instance -> instance.group(
 							Codec.STRING.fieldOf("weapon_attribute_identifier").forGetter(ModularWeaponModuleDataComponent::weapon_attribute_identifier),
 							Codec.STRING.listOf().fieldOf("spell_identifier_list").forGetter(ModularWeaponModuleDataComponent::spell_identifier_list),
-							AttributeModifier.CODEC.listOf().fieldOf("attribute_modifier_list").forGetter(ModularWeaponModuleDataComponent::attribute_modifier_list)
-					)
+							AttributeModifier.CODEC.listOf().fieldOf("attribute_modifier_list").forGetter(ModularWeaponModuleDataComponent::attribute_modifier_list),
+							Codec.INT.fieldOf("additional_item_damage_per_attack").forGetter(ModularWeaponModuleDataComponent::additional_item_damage_per_attack),
+							Codec.FLOAT.fieldOf("additional_seconds_to_disable_blocking").forGetter(ModularWeaponModuleDataComponent::additional_seconds_to_disable_blocking)
+							)
 					.apply(instance, ModularWeaponModuleDataComponent::new)
 	);
 	public static final StreamCodec<RegistryFriendlyByteBuf, ModularWeaponModuleDataComponent> STREAM_CODEC = StreamCodec.composite(
@@ -35,6 +41,10 @@ public record ModularWeaponModuleDataComponent(
 			component -> component.spell_identifier_list,
 			AttributeModifier.STREAM_CODEC.apply(ByteBufCodecs.list()),
 			component -> component.attribute_modifier_list,
+			ByteBufCodecs.INT,
+			ModularWeaponModuleDataComponent::additional_item_damage_per_attack,
+			ByteBufCodecs.FLOAT,
+			ModularWeaponModuleDataComponent::additional_seconds_to_disable_blocking,
 			ModularWeaponModuleDataComponent::new
 	);
 
@@ -76,11 +86,15 @@ public record ModularWeaponModuleDataComponent(
 		String weapon_attribute_identifier;
 		List<String> spell_identifier_list = new ArrayList<>();
 		List<AttributeModifier> attribute_modifier_list = new ArrayList<>();
+		int additional_item_damage_per_attack;
+		float additional_seconds_to_disable_blocking;
 
 		public Builder(ModularWeaponModuleDataComponent base) {
 			this.weapon_attribute_identifier = base.weapon_attribute_identifier();
 			this.spell_identifier_list.addAll(base.spell_identifier_list());
 			this.attribute_modifier_list.addAll(base.attribute_modifier_list());
+			this.additional_item_damage_per_attack = base.additional_item_damage_per_attack();
+			this.additional_seconds_to_disable_blocking = base.additional_seconds_to_disable_blocking();
 		}
 
 //		public ModularWeaponComponentDataComponent.Builder withBladeModules(ModularWeaponComponentDataComponent.BladeModules bladeModules) {
@@ -109,7 +123,13 @@ public record ModularWeaponModuleDataComponent(
 //		}
 
 		public ModularWeaponModuleDataComponent build() {
-			return new ModularWeaponModuleDataComponent(this.weapon_attribute_identifier, this.spell_identifier_list, this.attribute_modifier_list);
+			return new ModularWeaponModuleDataComponent(
+					this.weapon_attribute_identifier,
+					this.spell_identifier_list,
+					this.attribute_modifier_list,
+					this.additional_item_damage_per_attack,
+					this.additional_seconds_to_disable_blocking
+			);
 		}
 	}
 

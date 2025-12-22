@@ -18,6 +18,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.Weapon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		super(MenuTypeRegistry.MODULAR_EQUIPMENT_FORGE_MENU, i);
 		this.access = containerLevelAccess;
 		this.inputContainer = createContainer(1);
-		this.componentsContainer = createContainer(3);
+		this.componentsContainer = createContainer(4);
 		this.resultContainer = createContainer(1);
 
 		this.addStandardInventorySlots(inventory, 8, 84);
@@ -138,6 +139,7 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		((SlotCustomization) this.slots.get(38)).slotcustomizationapi$setDisabledOverride(true);
 		((SlotCustomization) this.slots.get(39)).slotcustomizationapi$setDisabledOverride(true);
 		((SlotCustomization) this.slots.get(40)).slotcustomizationapi$setDisabledOverride(true);
+		((SlotCustomization) this.slots.get(41)).slotcustomizationapi$setDisabledOverride(true);
 
 	}
 
@@ -173,7 +175,6 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		ItemStack baseItemStack = this.inputContainer.getItem(0);
 
 		int currentDamage = baseItemStack.getDamageValue();
-		double damageRatio = currentDamage / (double) Math.max(baseItemStack.getMaxDamage(), 1);
 		ModularBladeWeaponDataComponent modularBladeWeaponDataComponent = baseItemStack.get(ModularEquipment.MODULAR_BLADE_WEAPON);
 		ModularShaftWeaponDataComponent modularShaftWeaponDataComponent = baseItemStack.get(ModularEquipment.MODULAR_SHAFT_WEAPON);
 		if (modularBladeWeaponDataComponent != null) {
@@ -229,7 +230,7 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 					this.componentsContainer.getItem(3).copy()
 			));
 			resultStack.set(ModularEquipment.MODULAR_BLADE_WEAPON, builder.build());
-			resultStack = applyModuleDependentComponents(resultStack, List.of(this.componentsContainer.getItem(0).copy(), this.componentsContainer.getItem(1).copy(), this.componentsContainer.getItem(3).copy()));
+			resultStack = applyModuleDependentComponents(resultStack, List.of(this.componentsContainer.getItem(3).copy(), this.componentsContainer.getItem(1).copy(), this.componentsContainer.getItem(0).copy()));
 		} else if (modularShaftWeaponDataComponent != null) {
 			ModularShaftWeaponDataComponent.Builder builder = new ModularShaftWeaponDataComponent.Builder(modularShaftWeaponDataComponent);
 			builder.withModules(new ModularShaftWeaponDataComponent.Modules(
@@ -237,11 +238,12 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 					this.componentsContainer.getItem(3).copy()
 			));
 			resultStack.set(ModularEquipment.MODULAR_SHAFT_WEAPON, builder.build());
-			resultStack = applyModuleDependentComponents(resultStack, List.of(this.componentsContainer.getItem(2).copy(), this.componentsContainer.getItem(3).copy()));
+			resultStack = applyModuleDependentComponents(resultStack, List.of(this.componentsContainer.getItem(3).copy(), this.componentsContainer.getItem(2).copy()));
 		}
+		ModularEquipment.info("resultStack: " + resultStack);
 		this.resultContainer.setItem(0, resultStack);
 		((SlotCustomization) this.slots.get(36)).slotcustomizationapi$setDisabledOverride(true);
-		((SlotCustomization) this.slots.get(40)).slotcustomizationapi$setDisabledOverride(false);
+		((SlotCustomization) this.slots.get(41)).slotcustomizationapi$setDisabledOverride(false);
 	}
 
 	private void clearInputAndComponentSlots() {
@@ -276,6 +278,8 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		String weapon_attribute_identifier = "";
 		int max_damage = 0;
 		int damage = 0;
+		int itemDamagePerAttack = 0;
+		float disableBlockingForSeconds = 0.0F;
 		for (ItemStack itemStack : moduleStackList) {
 			ModularWeaponModuleDataComponent modularWeaponModuleDataComponent = itemStack.get(ModularEquipment.MODULAR_WEAPON_MODULE);
 			if (modularWeaponModuleDataComponent != null) {
@@ -288,6 +292,8 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 				if (!modularWeaponModuleDataComponent.attribute_modifier_list().isEmpty()) {
 					attribute_modifier_list.addAll(modularWeaponModuleDataComponent.attribute_modifier_list());
 				}
+				itemDamagePerAttack += modularWeaponModuleDataComponent.additional_item_damage_per_attack();
+				disableBlockingForSeconds += modularWeaponModuleDataComponent.additional_seconds_to_disable_blocking();
 			}
 			if (itemStack.isDamageableItem()) {
 				max_damage += itemStack.getMaxDamage();
@@ -298,9 +304,9 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		// 	RPG Inventory compat (can item be used, "can_not_be_two_handed", "needs_to_be_two_handed")
 		resultStack = ModularEquipment.applySpellContainer(resultStack, spell_identifier_list);
 		resultStack = ModularEquipment.applyWeaponAttribute(resultStack, weapon_attribute_identifier);
-		resultStack.set(DataComponents.MAX_DAMAGE, max_damage);
+		resultStack.set(DataComponents.MAX_DAMAGE, Math.max(1, max_damage));
+		resultStack.set(DataComponents.WEAPON, new Weapon(itemDamagePerAttack, disableBlockingForSeconds));
 		resultStack.setDamageValue(damage);
-
 		return resultStack;
 	}
 

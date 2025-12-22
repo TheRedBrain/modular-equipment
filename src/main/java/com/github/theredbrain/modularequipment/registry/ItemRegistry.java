@@ -22,7 +22,7 @@ public class ItemRegistry {
 	public static ResourceKey<Item> COPPER_SHORT_SWORD_BLADE_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("copper_short_sword_blade"));
 	public static final Item COPPER_SHORT_SWORD_BLADE = registerItem(COPPER_SHORT_SWORD_BLADE_KEY, new Item(
 			new Item.Properties().setId(COPPER_SHORT_SWORD_BLADE_KEY)
-					.durability(150)
+					.durability(10)
 					.component(ModularEquipment.MODULAR_WEAPON_MODULE, new ModularWeaponModuleDataComponent(
 							"bettercombat:sword",
 							new ArrayList<>(),
@@ -32,20 +32,16 @@ public class ItemRegistry {
 											3.0,
 											AttributeModifier.Operation.ADD_VALUE
 									)
-							)
+							),
+							1,
+							0.0F
 					))
 	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
 
 	public static ResourceKey<Item> COPPER_STRAIGHT_CROSS_GUARD_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("copper_straight_cross_guard"));
 	public static final Item COPPER_STRAIGHT_CROSS_GUARD = registerItem(COPPER_STRAIGHT_CROSS_GUARD_KEY, new Item(
 			new Item.Properties().setId(COPPER_STRAIGHT_CROSS_GUARD_KEY)
-					.stacksTo(1)
-	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
-
-	public static ResourceKey<Item> COPPER_ROUND_POMMEL_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("copper_round_pommel"));
-	public static final Item COPPER_ROUND_POMMEL = registerItem(COPPER_ROUND_POMMEL_KEY, new Item(
-			new Item.Properties().setId(COPPER_ROUND_POMMEL_KEY)
-					.durability(50)
+					.durability(10)
 					.component(ModularEquipment.MODULAR_WEAPON_MODULE, new ModularWeaponModuleDataComponent(
 							"",
 							new ArrayList<>(),
@@ -55,7 +51,28 @@ public class ItemRegistry {
 											1.0,
 											AttributeModifier.Operation.ADD_VALUE
 									)
-							)
+							),
+							0,
+							0.0F
+					))
+	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
+
+	public static ResourceKey<Item> COPPER_ROUND_POMMEL_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("copper_round_pommel"));
+	public static final Item COPPER_ROUND_POMMEL = registerItem(COPPER_ROUND_POMMEL_KEY, new Item(
+			new Item.Properties().setId(COPPER_ROUND_POMMEL_KEY)
+					.durability(10)
+					.component(ModularEquipment.MODULAR_WEAPON_MODULE, new ModularWeaponModuleDataComponent(
+							"",
+							new ArrayList<>(),
+							List.of(
+									new AttributeModifier(
+											Identifier.withDefaultNamespace("attack_damage"),
+											1.0,
+											AttributeModifier.Operation.ADD_VALUE
+									)
+							),
+							0,
+							0.0F
 					))
 	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
 
