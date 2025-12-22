@@ -1,7 +1,7 @@
 package com.github.theredbrain.modularequipment.renderer.item;
 
 import com.github.theredbrain.modularequipment.ModularEquipment;
-import com.github.theredbrain.modularequipment.component.type.BladeModulesComponent;
+import com.github.theredbrain.modularequipment.component.type.ModularBladeComponent;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -37,9 +37,9 @@ public class ModularBladeComponentItemSpecialRenderer implements ItemModel {
 	) {
 		itemStackRenderState.appendModelIdentityElement(this);
 
-		BladeModulesComponent bladeModulesComponent = itemStack.get(ModularEquipment.BLADE_MODULES);
-		if (bladeModulesComponent != null) {
-			ItemStack itemStack1 = bladeModulesComponent.getComponentItemStack(this.component_type);
+		ModularBladeComponent modularBladeComponent = itemStack.get(ModularEquipment.MODULAR_BLADE);
+		if (modularBladeComponent != null) {
+			ItemStack itemStack1 = modularBladeComponent.getComponentItemStack(this.component_type);
 			if (!itemStack1.isEmpty()) {
 				itemModelResolver.appendItemLayers(itemStackRenderState, itemStack1, itemDisplayContext, clientLevel, itemOwner, i);
 			}

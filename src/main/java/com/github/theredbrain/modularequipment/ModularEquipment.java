@@ -1,6 +1,6 @@
 package com.github.theredbrain.modularequipment;
 
-import com.github.theredbrain.modularequipment.component.type.BladeModulesComponent;
+import com.github.theredbrain.modularequipment.component.type.ModularBladeComponent;
 import com.github.theredbrain.modularequipment.registry.DataComponentTypeRegistry;
 import com.github.theredbrain.modularequipment.registry.CreativeModeTabRegistry;
 import com.github.theredbrain.modularequipment.registry.ItemRegistry;
@@ -14,7 +14,7 @@ public class ModularEquipment implements ModInitializer {
 	public static final String MOD_ID = "modularequipment";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	public static DataComponentType<BladeModulesComponent> BLADE_MODULES;
+	public static DataComponentType<ModularBladeComponent> MODULAR_BLADE;
 
 	@Override
 	public void onInitialize() {
@@ -22,8 +22,8 @@ public class ModularEquipment implements ModInitializer {
 
 		// Registry
 		DataComponentTypeRegistry.init();
-		CreativeModeTabRegistry.init();
 		ItemRegistry.init();
+		CreativeModeTabRegistry.init();
 	}
 
 	public static Identifier identifier(String path) {

@@ -1,5 +1,7 @@
 {
   "values": [
-    "modularequipment:copper_short_sword_blade"
+    "modularequipment:copper_short_sword_blade",
+    "modularequipment:diamond_short_sword_blade",
+    "modularequipment:iron_short_sword_blade"
   ]
 }

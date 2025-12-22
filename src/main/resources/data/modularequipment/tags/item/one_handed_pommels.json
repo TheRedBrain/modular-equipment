@@ -1,5 +1,7 @@
 {
   "values": [
-    "modularequipment:copper_round_pommel"
+    "modularequipment:copper_round_pommel",
+    "modularequipment:diamond_round_pommel",
+    "modularequipment:iron_round_pommel"
   ]
 }
