@@ -18,7 +18,6 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 	static final Identifier EMPTY_SLOT_POMMEL_COMPONENT = ModularEquipment.identifier("container/slot/blade_component");
 	static final Identifier EMPTY_SLOT_BLADE_COMPONENT = ModularEquipment.identifier("container/slot/blade_component");
 	static final Identifier EMPTY_SLOT_CROSS_GUARD_COMPONENT = ModularEquipment.identifier("container/slot/cross_guard_component");
-	static final Identifier EMPTY_SLOT_GRIP_COMPONENT = ModularEquipment.identifier("container/slot/grip_component");
 
 	private final ContainerLevelAccess access;
 	private final Container inputContainer;
@@ -33,7 +32,7 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		super(MenuTypeRegistry.MODULAR_EQUIPMENT_FORGE_MENU, i);
 		this.access = containerLevelAccess;
 		this.inputContainer = createContainer(1);
-		this.componentsContainer = createContainer(4);
+		this.componentsContainer = createContainer(3);
 		this.resultContainer = createContainer(1);
 
 		this.addStandardInventorySlots(inventory, 8, 84);
@@ -76,21 +75,6 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 
 				if (modularBladeComponent != null && modularBladeComponent.cross_guard_items() != null) {
 					return itemStack.is(modularBladeComponent.cross_guard_items());
-				}
-				return false;
-			}
-
-		});
-
-		// grip slot
-		this.addSlot(new ComponentSlot(this.componentsContainer, 2, 70, 40, EMPTY_SLOT_GRIP_COMPONENT) {
-
-			@Override
-			public boolean mayPlace(ItemStack itemStack) {
-				ModularBladeComponent modularBladeComponent = ModularEquipmentForgeMenu.this.getSlot(36).getItem().get(ModularEquipment.MODULAR_BLADE);
-
-				if (modularBladeComponent != null && modularBladeComponent.grip_items() != null) {
-					return itemStack.is(modularBladeComponent.grip_items());
 				}
 				return false;
 			}
@@ -162,8 +146,7 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		if (modularBladeComponent != null) {
 			this.componentsContainer.setItem(0, modularBladeComponent.bladeModules().blade_component().copy());
 			this.componentsContainer.setItem(1, modularBladeComponent.bladeModules().cross_guard_component().copy());
-			this.componentsContainer.setItem(2, modularBladeComponent.bladeModules().grip_component().copy());
-			this.componentsContainer.setItem(3, modularBladeComponent.bladeModules().pommel_component().copy());
+			this.componentsContainer.setItem(2, modularBladeComponent.bladeModules().pommel_component().copy());
 			// TODO disable input and enable result
 		} else {
 			if (!this.componentsContainer.getItem(0).isEmpty()) {
@@ -175,9 +158,6 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 			if (!this.componentsContainer.getItem(2).isEmpty()) {
 				this.componentsContainer.setItem(2, ItemStack.EMPTY);
 			}
-			if (!this.componentsContainer.getItem(3).isEmpty()) {
-				this.componentsContainer.setItem(3, ItemStack.EMPTY);
-			}
 		}
 	}
 
@@ -187,10 +167,9 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		if (modularBladeComponent != null) {
 			ModularBladeComponent.Builder builder = new ModularBladeComponent.Builder(modularBladeComponent);
 			builder.withBladeModules(new ModularBladeComponent.BladeModules(
-					this.componentsContainer.getItem(0),
-					this.componentsContainer.getItem(1),
-					this.componentsContainer.getItem(2),
-					this.componentsContainer.getItem(3)
+					this.componentsContainer.getItem(0).copy(),
+					this.componentsContainer.getItem(1).copy(),
+					this.componentsContainer.getItem(2).copy()
 			));
 			resultStack.set(ModularEquipment.MODULAR_BLADE, builder.build());
 		}
@@ -210,9 +189,6 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 			}
 			if (!this.componentsContainer.getItem(2).isEmpty()) {
 				this.componentsContainer.setItem(2, ItemStack.EMPTY);
-			}
-			if (!this.componentsContainer.getItem(3).isEmpty()) {
-				this.componentsContainer.setItem(3, ItemStack.EMPTY);
 			}
 			// TODO enable input and disable result
 		}
