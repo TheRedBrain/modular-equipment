@@ -222,6 +222,7 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 					this.componentsContainer.getItem(3).copy()
 			));
 			resultStack.set(ModularEquipment.MODULAR_BLADE_WEAPON, builder.build());
+			resultStack = applyModuleDependentComponents(resultStack, List.of(this.componentsContainer.getItem(0).copy(), this.componentsContainer.getItem(1).copy(), this.componentsContainer.getItem(3).copy()));
 		} else if (modularShaftWeaponDataComponent != null) {
 			ModularShaftWeaponDataComponent.Builder builder = new ModularShaftWeaponDataComponent.Builder(modularShaftWeaponDataComponent);
 			builder.withModules(new ModularShaftWeaponDataComponent.Modules(
@@ -229,6 +230,7 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 					this.componentsContainer.getItem(3).copy()
 			));
 			resultStack.set(ModularEquipment.MODULAR_SHAFT_WEAPON, builder.build());
+			resultStack = applyModuleDependentComponents(resultStack, List.of(this.componentsContainer.getItem(2).copy(), this.componentsContainer.getItem(3).copy()));
 		}
 		this.resultContainer.setItem(0, resultStack);
 		((SlotCustomization) this.slots.get(36)).slotcustomizationapi$setDisabledOverride(true);
@@ -259,6 +261,10 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 			((SlotCustomization) this.slots.get(40)).slotcustomizationapi$setDisabledOverride(true);
 			((SlotCustomization) this.slots.get(41)).slotcustomizationapi$setDisabledOverride(true);
 		}
+	}
+
+	private ItemStack applyModuleDependentComponents(ItemStack resultStack, List<ItemStack> moduleStackList) {
+		return resultStack;
 	}
 
 	@Override

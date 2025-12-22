@@ -2,16 +2,19 @@ package com.github.theredbrain.modularequipment.registry;
 
 import com.github.theredbrain.modularequipment.ModularEquipment;
 import com.github.theredbrain.modularequipment.component.type.ModularBladeWeaponDataComponent;
-import com.github.theredbrain.modularequipment.component.temp.ModularWeaponComponentDataComponent;
+import com.github.theredbrain.modularequipment.component.type.ModularWeaponModuleDataComponent;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemRegistry {
@@ -19,7 +22,18 @@ public class ItemRegistry {
 	public static ResourceKey<Item> COPPER_SHORT_SWORD_BLADE_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("copper_short_sword_blade"));
 	public static final Item COPPER_SHORT_SWORD_BLADE = registerItem(COPPER_SHORT_SWORD_BLADE_KEY, new Item(
 			new Item.Properties().setId(COPPER_SHORT_SWORD_BLADE_KEY)
-					.stacksTo(1)
+					.durability(150)
+					.component(ModularEquipment.MODULAR_WEAPON_MODULE, new ModularWeaponModuleDataComponent(
+							"bettercombat:sword",
+							new ArrayList<>(),
+							List.of(
+									new AttributeModifier(
+											Identifier.withDefaultNamespace("attack_damage"),
+											3.0,
+											AttributeModifier.Operation.ADD_VALUE
+									)
+							)
+					))
 	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
 
 	public static ResourceKey<Item> COPPER_STRAIGHT_CROSS_GUARD_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("copper_straight_cross_guard"));
@@ -31,7 +45,18 @@ public class ItemRegistry {
 	public static ResourceKey<Item> COPPER_ROUND_POMMEL_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("copper_round_pommel"));
 	public static final Item COPPER_ROUND_POMMEL = registerItem(COPPER_ROUND_POMMEL_KEY, new Item(
 			new Item.Properties().setId(COPPER_ROUND_POMMEL_KEY)
-					.stacksTo(1)
+					.durability(50)
+					.component(ModularEquipment.MODULAR_WEAPON_MODULE, new ModularWeaponModuleDataComponent(
+							"",
+							new ArrayList<>(),
+							List.of(
+									new AttributeModifier(
+											Identifier.withDefaultNamespace("attack_damage"),
+											1.0,
+											AttributeModifier.Operation.ADD_VALUE
+									)
+							)
+					))
 	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
 
 	public static ResourceKey<Item> DIAMOND_SHORT_SWORD_BLADE_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("diamond_short_sword_blade"));

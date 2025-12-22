@@ -2,7 +2,7 @@ package com.github.theredbrain.modularequipment;
 
 import com.github.theredbrain.modularequipment.component.type.ModularBladeWeaponDataComponent;
 import com.github.theredbrain.modularequipment.component.type.ModularShaftWeaponDataComponent;
-import com.github.theredbrain.modularequipment.component.temp.ModularWeaponComponentDataComponent;
+import com.github.theredbrain.modularequipment.component.type.ModularWeaponModuleDataComponent;
 import com.github.theredbrain.modularequipment.registry.BlockRegistry;
 import com.github.theredbrain.modularequipment.registry.DataComponentTypeRegistry;
 import com.github.theredbrain.modularequipment.registry.CreativeModeTabRegistry;
@@ -22,7 +22,7 @@ public class ModularEquipment implements ModInitializer {
 
 	public static DataComponentType<ModularShaftWeaponDataComponent> MODULAR_SHAFT_WEAPON;
 
-	public static DataComponentType<ModularWeaponComponentDataComponent> MODULAR_WEAPON_COMPONENT;
+	public static DataComponentType<ModularWeaponModuleDataComponent> MODULAR_WEAPON_MODULEm;
 
 	@Override
 	public void onInitialize() {
