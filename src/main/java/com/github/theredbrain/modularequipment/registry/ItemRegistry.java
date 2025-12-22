@@ -1,7 +1,8 @@
 package com.github.theredbrain.modularequipment.registry;
 
 import com.github.theredbrain.modularequipment.ModularEquipment;
-import com.github.theredbrain.modularequipment.component.type.ModularBladeComponent;
+import com.github.theredbrain.modularequipment.component.type.ModularBladeWeaponDataComponent;
+import com.github.theredbrain.modularequipment.component.temp.ModularWeaponComponentDataComponent;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -91,9 +92,9 @@ public class ItemRegistry {
 	public static final Item NETHERITE_ONE_HANDED_BLADE_WEAPON = registerItem(NETHERITE_ONE_HANDED_BLADE_WEAPON_KEY, new Item(
 			new Item.Properties().setId(NETHERITE_ONE_HANDED_BLADE_WEAPON_KEY)
 					.stacksTo(1)
-					.component(ModularEquipment.MODULAR_BLADE,
-							new ModularBladeComponent(
-									new ModularBladeComponent.BladeModules(
+					.component(ModularEquipment.MODULAR_BLADE_WEAPON,
+							new ModularBladeWeaponDataComponent(
+									new ModularBladeWeaponDataComponent.Modules(
 											ItemStack.EMPTY,
 											ItemStack.EMPTY,
 											ItemStack.EMPTY
@@ -128,13 +129,13 @@ public class ItemRegistry {
 	public static final Item REGULAR_ONE_HANDED_BLADE_WEAPON = registerItem(REGULAR_ONE_HANDED_BLADE_WEAPON_KEY, new Item(
 			new Item.Properties().setId(REGULAR_ONE_HANDED_BLADE_WEAPON_KEY)
 					.stacksTo(1)
-					.component(ModularEquipment.MODULAR_BLADE,
-							new ModularBladeComponent(
-									new ModularBladeComponent.BladeModules(
+					.component(ModularEquipment.MODULAR_BLADE_WEAPON,
+							new ModularBladeWeaponDataComponent(
+									new ModularBladeWeaponDataComponent.Modules(
 											ItemStack.EMPTY,
 											ItemStack.EMPTY,
 											ItemStack.EMPTY
-											),
+									),
 									Tags.ONE_HANDED_BLADES,
 									Tags.ONE_HANDED_CROSS_GUARDS,
 									Tags.ONE_HANDED_POMMELS,
