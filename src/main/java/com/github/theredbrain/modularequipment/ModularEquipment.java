@@ -1,9 +1,11 @@
 package com.github.theredbrain.modularequipment;
 
 import com.github.theredbrain.modularequipment.component.type.ModularBladeComponent;
+import com.github.theredbrain.modularequipment.registry.BlockRegistry;
 import com.github.theredbrain.modularequipment.registry.DataComponentTypeRegistry;
 import com.github.theredbrain.modularequipment.registry.CreativeModeTabRegistry;
 import com.github.theredbrain.modularequipment.registry.ItemRegistry;
+import com.github.theredbrain.modularequipment.registry.MenuTypeRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.Identifier;
@@ -21,9 +23,11 @@ public class ModularEquipment implements ModInitializer {
 		LOGGER.info("Initializing Modular Equipment!");
 
 		// Registry
+		BlockRegistry.init();
 		DataComponentTypeRegistry.init();
 		ItemRegistry.init();
 		CreativeModeTabRegistry.init();
+		MenuTypeRegistry.registerAll();
 	}
 
 	public static Identifier identifier(String path) {

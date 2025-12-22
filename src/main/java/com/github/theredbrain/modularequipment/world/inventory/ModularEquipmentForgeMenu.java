@@ -1,0 +1,245 @@
+package com.github.theredbrain.modularequipment.world.inventory;
+
+import com.github.theredbrain.modularequipment.ModularEquipment;
+import com.github.theredbrain.modularequipment.component.type.ModularBladeComponent;
+import com.github.theredbrain.modularequipment.registry.MenuTypeRegistry;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+
+public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
+
+	static final Identifier EMPTY_SLOT_POMMEL_COMPONENT = ModularEquipment.identifier("container/slot/blade_component");
+	static final Identifier EMPTY_SLOT_BLADE_COMPONENT = ModularEquipment.identifier("container/slot/blade_component");
+	static final Identifier EMPTY_SLOT_CROSS_GUARD_COMPONENT = ModularEquipment.identifier("container/slot/cross_guard_component");
+	static final Identifier EMPTY_SLOT_GRIP_COMPONENT = ModularEquipment.identifier("container/slot/grip_component");
+
+	private final ContainerLevelAccess access;
+	private final Container inputContainer;
+	private final Container componentsContainer;
+	private final Container resultContainer;
+
+	public ModularEquipmentForgeMenu(int i, Inventory inventory) {
+		this(i, inventory, ContainerLevelAccess.NULL);
+	}
+
+	public ModularEquipmentForgeMenu(int i, Inventory inventory, ContainerLevelAccess containerLevelAccess) {
+		super(MenuTypeRegistry.MODULAR_EQUIPMENT_FORGE_MENU, i);
+		this.access = containerLevelAccess;
+		this.inputContainer = createContainer(1);
+		this.componentsContainer = createContainer(4);
+		this.resultContainer = createContainer(1);
+
+		this.addStandardInventorySlots(inventory, 8, 84);
+
+		// input slot
+		this.addSlot(new Slot(this.inputContainer, 0, 64, 8) {
+
+			@Override
+			public boolean mayPlace(ItemStack itemStack) {
+				return itemStack.has(ModularEquipment.MODULAR_BLADE);
+			}
+
+			@Override
+			public boolean mayPickup(Player player) {
+				return false;
+			}
+		});
+
+		// blades slot
+		this.addSlot(new ComponentSlot(this.componentsContainer, 0, 30, 40, EMPTY_SLOT_BLADE_COMPONENT) {
+
+			@Override
+			public boolean mayPlace(ItemStack itemStack) {
+				ModularBladeComponent modularBladeComponent = ModularEquipmentForgeMenu.this.getSlot(36).getItem().get(ModularEquipment.MODULAR_BLADE);
+
+				if (modularBladeComponent != null && modularBladeComponent.blade_items() != null) {
+					return itemStack.is(modularBladeComponent.blade_items());
+				}
+				return false;
+			}
+
+		});
+
+		// cross guard slot
+		this.addSlot(new ComponentSlot(this.componentsContainer, 1, 50, 40, EMPTY_SLOT_CROSS_GUARD_COMPONENT) {
+
+			@Override
+			public boolean mayPlace(ItemStack itemStack) {
+				ModularBladeComponent modularBladeComponent = ModularEquipmentForgeMenu.this.getSlot(36).getItem().get(ModularEquipment.MODULAR_BLADE);
+
+				if (modularBladeComponent != null && modularBladeComponent.cross_guard_items() != null) {
+					return itemStack.is(modularBladeComponent.cross_guard_items());
+				}
+				return false;
+			}
+
+		});
+
+		// grip slot
+		this.addSlot(new ComponentSlot(this.componentsContainer, 2, 70, 40, EMPTY_SLOT_GRIP_COMPONENT) {
+
+			@Override
+			public boolean mayPlace(ItemStack itemStack) {
+				ModularBladeComponent modularBladeComponent = ModularEquipmentForgeMenu.this.getSlot(36).getItem().get(ModularEquipment.MODULAR_BLADE);
+
+				if (modularBladeComponent != null && modularBladeComponent.grip_items() != null) {
+					return itemStack.is(modularBladeComponent.grip_items());
+				}
+				return false;
+			}
+
+		});
+
+		// pommel slot
+		this.addSlot(new ComponentSlot(this.componentsContainer, 3, 8, 40, EMPTY_SLOT_POMMEL_COMPONENT) {
+
+			@Override
+			public boolean mayPlace(ItemStack itemStack) {
+				ModularBladeComponent modularBladeComponent = ModularEquipmentForgeMenu.this.getSlot(36).getItem().get(ModularEquipment.MODULAR_BLADE);
+
+				if (modularBladeComponent != null && modularBladeComponent.pommel_items() != null) {
+					return itemStack.is(modularBladeComponent.pommel_items());
+				}
+				return false;
+			}
+
+		});
+
+		// result slot
+		this.addSlot(new Slot(this.resultContainer, 0, 77, 62) {
+
+			@Override
+			public boolean mayPlace(ItemStack itemStack) {
+				return false;
+			}
+
+		});
+
+		// TODO Inventory Slot API stuff
+		// 	disable component slot
+		// 	tooltips
+
+	}
+
+	private SimpleContainer createContainer(int i) {
+		return new SimpleContainer(i) {
+			@Override
+			public void setChanged() {
+				super.setChanged();
+				ModularEquipmentForgeMenu.this.slotsChanged(this);
+			}
+		};
+	}
+
+	@Override
+	public void removed(Player player) {
+		super.removed(player);
+		this.access.execute((level, blockPos) -> this.clearContainer(player, this.resultContainer));
+	}
+
+	@Override
+	public void slotsChanged(Container container) {
+		super.slotsChanged(container);
+		if (container == this.inputContainer) {
+			this.populateComponentSlots();
+		} else if (container == this.componentsContainer) {
+			this.createResult();
+		} else if (container == this.resultContainer) {
+			this.clearInputAndComponentSlots();
+		}
+	}
+
+	private void populateComponentSlots() {
+		ItemStack baseItemStack = this.inputContainer.getItem(0);
+		ModularBladeComponent modularBladeComponent = baseItemStack.get(ModularEquipment.MODULAR_BLADE);
+		if (modularBladeComponent != null) {
+			this.componentsContainer.setItem(0, modularBladeComponent.bladeModules().blade_component().copy());
+			this.componentsContainer.setItem(1, modularBladeComponent.bladeModules().cross_guard_component().copy());
+			this.componentsContainer.setItem(2, modularBladeComponent.bladeModules().grip_component().copy());
+			this.componentsContainer.setItem(3, modularBladeComponent.bladeModules().pommel_component().copy());
+			// TODO disable input and enable result
+		} else {
+			if (!this.componentsContainer.getItem(0).isEmpty()) {
+				this.componentsContainer.setItem(0, ItemStack.EMPTY);
+			}
+			if (!this.componentsContainer.getItem(1).isEmpty()) {
+				this.componentsContainer.setItem(1, ItemStack.EMPTY);
+			}
+			if (!this.componentsContainer.getItem(2).isEmpty()) {
+				this.componentsContainer.setItem(2, ItemStack.EMPTY);
+			}
+			if (!this.componentsContainer.getItem(3).isEmpty()) {
+				this.componentsContainer.setItem(3, ItemStack.EMPTY);
+			}
+		}
+	}
+
+	private void createResult() {
+		ItemStack resultStack = this.inputContainer.getItem(0).copy();
+		ModularBladeComponent modularBladeComponent = resultStack.get(ModularEquipment.MODULAR_BLADE);
+		if (modularBladeComponent != null) {
+			ModularBladeComponent.Builder builder = new ModularBladeComponent.Builder(modularBladeComponent);
+			builder.withBladeModules(new ModularBladeComponent.BladeModules(
+					this.componentsContainer.getItem(0),
+					this.componentsContainer.getItem(1),
+					this.componentsContainer.getItem(2),
+					this.componentsContainer.getItem(3)
+			));
+			resultStack.set(ModularEquipment.MODULAR_BLADE, builder.build());
+		}
+		this.resultContainer.setItem(0, resultStack);
+	}
+
+	private void clearInputAndComponentSlots() {
+		if (this.resultContainer.getItem(0).isEmpty()) {
+			if (!this.inputContainer.getItem(0).isEmpty()) {
+				this.inputContainer.setItem(0, ItemStack.EMPTY);
+			}
+			if (!this.componentsContainer.getItem(0).isEmpty()) {
+				this.componentsContainer.setItem(0, ItemStack.EMPTY);
+			}
+			if (!this.componentsContainer.getItem(1).isEmpty()) {
+				this.componentsContainer.setItem(1, ItemStack.EMPTY);
+			}
+			if (!this.componentsContainer.getItem(2).isEmpty()) {
+				this.componentsContainer.setItem(2, ItemStack.EMPTY);
+			}
+			if (!this.componentsContainer.getItem(3).isEmpty()) {
+				this.componentsContainer.setItem(3, ItemStack.EMPTY);
+			}
+			// TODO enable input and disable result
+		}
+	}
+
+	@Override
+	public ItemStack quickMoveStack(Player player, int i) {
+		return ItemStack.EMPTY;
+	}
+
+	@Override
+	public boolean stillValid(Player player) {
+		return true;
+	}
+
+	static class ComponentSlot extends Slot {
+		Identifier emptySlotIcon;
+
+		public ComponentSlot(Container container, int i, int x, int y, Identifier emptySlotIcon) {
+			super(container, i, x, y);
+			this.emptySlotIcon = emptySlotIcon;
+		}
+
+		@Override
+		public Identifier getNoItemIcon() {
+			return this.emptySlotIcon;
+		}
+	}
+
+}
