@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "modularequipment:item/regular_one_handed_blade_weapon"
+  }
+}

@@ -69,9 +69,47 @@ public class ItemRegistry {
 					.stacksTo(1)
 	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
 
-	public static ResourceKey<Item> ONE_HANDED_BLADE_WEAPON_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("one_handed_blade_weapon"));
-	public static final Item ONE_HANDED_BLADE_WEAPON = registerItem(ONE_HANDED_BLADE_WEAPON_KEY, new Item(
-			new Item.Properties().setId(ONE_HANDED_BLADE_WEAPON_KEY)
+	public static ResourceKey<Item> REGULAR_ONE_HANDED_BLADE_WEAPON_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("regular_one_handed_blade_weapon"));
+	public static final Item REGULAR_ONE_HANDED_BLADE_WEAPON = registerItem(REGULAR_ONE_HANDED_BLADE_WEAPON_KEY, new Item(
+			new Item.Properties().setId(REGULAR_ONE_HANDED_BLADE_WEAPON_KEY)
+					.stacksTo(1)
+					.component(ModularEquipment.MODULAR_BLADE,
+							new ModularBladeComponent(
+									new ModularBladeComponent.BladeModules(
+											ItemStack.EMPTY,
+											ItemStack.EMPTY,
+											ItemStack.EMPTY
+											),
+									Tags.ONE_HANDED_BLADES,
+									Tags.ONE_HANDED_CROSS_GUARDS,
+									Tags.ONE_HANDED_POMMELS,
+									0
+							)
+					)
+	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
+
+	public static ResourceKey<Item> GOLDEN_ONE_HANDED_BLADE_WEAPON_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("golden_one_handed_blade_weapon"));
+	public static final Item GOLDEN_ONE_HANDED_BLADE_WEAPON = registerItem(GOLDEN_ONE_HANDED_BLADE_WEAPON_KEY, new Item(
+			new Item.Properties().setId(GOLDEN_ONE_HANDED_BLADE_WEAPON_KEY)
+					.stacksTo(1)
+					.component(ModularEquipment.MODULAR_BLADE,
+							new ModularBladeComponent(
+									new ModularBladeComponent.BladeModules(
+											ItemStack.EMPTY,
+											ItemStack.EMPTY,
+											ItemStack.EMPTY
+											),
+									Tags.ONE_HANDED_BLADES,
+									Tags.ONE_HANDED_CROSS_GUARDS,
+									Tags.ONE_HANDED_POMMELS,
+									0
+							)
+					)
+	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
+
+	public static ResourceKey<Item> NETHERITE_ONE_HANDED_BLADE_WEAPON_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("netherite_one_handed_blade_weapon"));
+	public static final Item NETHERITE_ONE_HANDED_BLADE_WEAPON = registerItem(NETHERITE_ONE_HANDED_BLADE_WEAPON_KEY, new Item(
+			new Item.Properties().setId(NETHERITE_ONE_HANDED_BLADE_WEAPON_KEY)
 					.stacksTo(1)
 					.component(ModularEquipment.MODULAR_BLADE,
 							new ModularBladeComponent(

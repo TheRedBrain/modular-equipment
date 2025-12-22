@@ -1,0 +1,23 @@
+{
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "modularequipment:item/netherite_one_handed_blade_weapon"
+      },
+      {
+        "type": "modularequipment:modular_blade_component",
+        "component_type": "pommel"
+      },
+      {
+        "type": "modularequipment:modular_blade_component",
+        "component_type": "blade"
+      },
+      {
+        "type": "modularequipment:modular_blade_component",
+        "component_type": "cross_guard"
+      }
+    ]
+  }
+}
