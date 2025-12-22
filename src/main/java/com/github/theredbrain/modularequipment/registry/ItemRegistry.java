@@ -78,12 +78,10 @@ public class ItemRegistry {
 									new ModularBladeComponent.BladeModules(
 											ItemStack.EMPTY,
 											ItemStack.EMPTY,
-											ItemStack.EMPTY,
 											ItemStack.EMPTY
 											),
 									Tags.ONE_HANDED_BLADES,
 									Tags.ONE_HANDED_CROSS_GUARDS,
-									Tags.ONE_HANDED_GRIPS,
 									Tags.ONE_HANDED_POMMELS,
 									0
 							)

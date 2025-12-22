@@ -9,5 +9,4 @@ public class Tags {
 	public static final TagKey<Item> ONE_HANDED_BLADES = TagKey.create(Registries.ITEM, ModularEquipment.identifier("one_handed_blades"));
 	public static final TagKey<Item> ONE_HANDED_CROSS_GUARDS = TagKey.create(Registries.ITEM, ModularEquipment.identifier("one_handed_cross_guards"));
 	public static final TagKey<Item> ONE_HANDED_POMMELS = TagKey.create(Registries.ITEM, ModularEquipment.identifier("one_handed_pommels"));
-	public static final TagKey<Item> ONE_HANDED_GRIPS = TagKey.create(Registries.ITEM, ModularEquipment.identifier("one_handed_grips"));
 }
