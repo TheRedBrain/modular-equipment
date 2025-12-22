@@ -17,16 +17,14 @@ public class CreativeModeTabRegistry {
 	public static CreativeModeTab MODULAR_EQUIPMENT;
 
 	public static void init() {
-		ItemStack creativeModeTabDisplay = new ItemStack(ItemRegistry.ONE_HANDED_BLADE_WEAPON);
+		ItemStack creativeModeTabDisplay = new ItemStack(ItemRegistry.REGULAR_ONE_HANDED_BLADE_WEAPON);
 		creativeModeTabDisplay.set(ModularEquipment.MODULAR_BLADE,
 				new ModularBladeComponent(
 						new ModularBladeComponent.BladeModules(
 								ItemRegistry.IRON_SHORT_SWORD_BLADE.getDefaultInstance(),
 								ItemRegistry.COPPER_STRAIGHT_CROSS_GUARD.getDefaultInstance(),
-								ItemStack.EMPTY,
 								ItemRegistry.DIAMOND_ROUND_POMMEL.getDefaultInstance()
 								),
-						null,
 						null,
 						null,
 						null,
