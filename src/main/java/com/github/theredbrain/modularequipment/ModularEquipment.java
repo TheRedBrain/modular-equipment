@@ -11,8 +11,11 @@ import com.github.theredbrain.modularequipment.registry.MenuTypeRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public class ModularEquipment implements ModInitializer {
 	public static final String MOD_ID = "modularequipment";
@@ -22,7 +25,23 @@ public class ModularEquipment implements ModInitializer {
 
 	public static DataComponentType<ModularShaftWeaponDataComponent> MODULAR_SHAFT_WEAPON;
 
-	public static DataComponentType<ModularWeaponModuleDataComponent> MODULAR_WEAPON_MODULEm;
+	public static DataComponentType<ModularWeaponModuleDataComponent> MODULAR_WEAPON_MODULE;
+
+	public static ItemStack applyWeaponAttribute(ItemStack itemStack, String weaponAttributeIdentifier) {
+		if (weaponAttributeIdentifier.isEmpty()) {
+			return itemStack;
+		}
+		// TODO Better Combat integration
+		return itemStack;
+	}
+
+	public static ItemStack applySpellContainer(ItemStack itemStack, List<String> spellIdentifierList) {
+		if (spellIdentifierList.isEmpty()) {
+			return itemStack;
+		}
+		// TODO Spell Engine integration
+		return itemStack;
+	}
 
 	@Override
 	public void onInitialize() {

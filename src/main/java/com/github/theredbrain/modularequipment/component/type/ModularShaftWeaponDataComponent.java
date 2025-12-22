@@ -55,6 +55,10 @@ public record ModularShaftWeaponDataComponent(
 		);
 	}
 
+	public boolean isUsable() {
+		return true;
+	}
+
 	public ItemStack getComponentItemStack(String component_type) {
 		if (Objects.equals(component_type, "head")) {
 			return this.modules.head_component;

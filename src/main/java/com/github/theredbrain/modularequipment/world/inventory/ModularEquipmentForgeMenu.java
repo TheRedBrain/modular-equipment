@@ -3,12 +3,15 @@ package com.github.theredbrain.modularequipment.world.inventory;
 import com.github.theredbrain.modularequipment.ModularEquipment;
 import com.github.theredbrain.modularequipment.component.type.ModularBladeWeaponDataComponent;
 import com.github.theredbrain.modularequipment.component.type.ModularShaftWeaponDataComponent;
+import com.github.theredbrain.modularequipment.component.type.ModularWeaponModuleDataComponent;
 import com.github.theredbrain.modularequipment.registry.MenuTypeRegistry;
 import com.github.theredbrain.slotcustomizationapi.api.SlotCustomization;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -16,6 +19,7 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
@@ -167,6 +171,9 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 
 	private void populateComponentSlots() {
 		ItemStack baseItemStack = this.inputContainer.getItem(0);
+
+		int currentDamage = baseItemStack.getDamageValue();
+		double damageRatio = currentDamage / (double) Math.max(baseItemStack.getMaxDamage(), 1);
 		ModularBladeWeaponDataComponent modularBladeWeaponDataComponent = baseItemStack.get(ModularEquipment.MODULAR_BLADE_WEAPON);
 		ModularShaftWeaponDataComponent modularShaftWeaponDataComponent = baseItemStack.get(ModularEquipment.MODULAR_SHAFT_WEAPON);
 		if (modularBladeWeaponDataComponent != null) {
@@ -264,6 +271,36 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 	}
 
 	private ItemStack applyModuleDependentComponents(ItemStack resultStack, List<ItemStack> moduleStackList) {
+		List<AttributeModifier> attribute_modifier_list = new ArrayList<>();
+		List<String> spell_identifier_list = new ArrayList<>();
+		String weapon_attribute_identifier = "";
+		int max_damage = 0;
+		int damage = 0;
+		for (ItemStack itemStack : moduleStackList) {
+			ModularWeaponModuleDataComponent modularWeaponModuleDataComponent = itemStack.get(ModularEquipment.MODULAR_WEAPON_MODULE);
+			if (modularWeaponModuleDataComponent != null) {
+				if (!modularWeaponModuleDataComponent.weapon_attribute_identifier().isEmpty()) {
+					weapon_attribute_identifier = modularWeaponModuleDataComponent.weapon_attribute_identifier();
+				}
+				if (!modularWeaponModuleDataComponent.spell_identifier_list().isEmpty()) {
+					spell_identifier_list.addAll(modularWeaponModuleDataComponent.spell_identifier_list());
+				}
+				if (!modularWeaponModuleDataComponent.attribute_modifier_list().isEmpty()) {
+					attribute_modifier_list.addAll(modularWeaponModuleDataComponent.attribute_modifier_list());
+				}
+			}
+			if (itemStack.isDamageableItem()) {
+				max_damage += itemStack.getMaxDamage();
+				damage += itemStack.getDamageValue();
+			}
+		}
+		// TODO EAMs
+		// 	RPG Inventory compat (can item be used, "can_not_be_two_handed", "needs_to_be_two_handed")
+		resultStack = ModularEquipment.applySpellContainer(resultStack, spell_identifier_list);
+		resultStack = ModularEquipment.applyWeaponAttribute(resultStack, weapon_attribute_identifier);
+		resultStack.set(DataComponents.MAX_DAMAGE, max_damage);
+		resultStack.setDamageValue(damage);
+
 		return resultStack;
 	}
 

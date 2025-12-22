@@ -62,6 +62,10 @@ public record ModularBladeWeaponDataComponent(
 		);
 	}
 
+	public boolean isUsable() {
+		return !this.modules.blade_component.isEmpty();
+	}
+
 	public ItemStack getComponentItemStack(String component_type) {
 		if (Objects.equals(component_type, "blade")) {
 			return this.modules.blade_component;
