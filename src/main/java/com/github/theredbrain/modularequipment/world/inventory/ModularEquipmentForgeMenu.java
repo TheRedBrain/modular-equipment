@@ -6,11 +6,15 @@ import com.github.theredbrain.modularequipment.component.type.ModularShaftWeapon
 import com.github.theredbrain.modularequipment.component.type.ModularWeaponModuleDataComponent;
 import com.github.theredbrain.modularequipment.registry.MenuTypeRegistry;
 import com.github.theredbrain.slotcustomizationapi.api.SlotCustomization;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -18,10 +22,14 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Weapon;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 
@@ -272,35 +280,107 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		}
 	}
 
+	// TODO remove list argument and get itemStacks from component
 	private ItemStack applyModuleDependentComponents(ItemStack resultStack, List<ItemStack> moduleStackList) {
-		List<AttributeModifier> attribute_modifier_list = new ArrayList<>();
+		List<ModularWeaponModuleDataComponent.ModularAttributeModifier> modular_attribute_modifier_list = new ArrayList<>();
 		List<String> spell_identifier_list = new ArrayList<>();
 		String weapon_attribute_identifier = "";
 		int max_damage = 0;
 		int damage = 0;
 		int itemDamagePerAttack = 0;
 		float disableBlockingForSeconds = 0.0F;
+
+		EquipmentSlotGroup equipmentSlotGroup = EquipmentSlotGroup.MAINHAND;
+
+		ModularWeaponModuleDataComponent modularWeaponModuleDataComponent1 = resultStack.get(ModularEquipment.MODULAR_WEAPON_MODULE);
+		if (modularWeaponModuleDataComponent1 != null) {
+			if (!modularWeaponModuleDataComponent1.weapon_attribute_identifier().isEmpty()) {
+				weapon_attribute_identifier = modularWeaponModuleDataComponent1.weapon_attribute_identifier();
+			}
+			if (!modularWeaponModuleDataComponent1.spell_identifier_list().isEmpty()) {
+				spell_identifier_list.addAll(modularWeaponModuleDataComponent1.spell_identifier_list());
+			}
+			if (!modularWeaponModuleDataComponent1.modular_attribute_modifier_list().isEmpty()) {
+				modular_attribute_modifier_list.addAll(modularWeaponModuleDataComponent1.modular_attribute_modifier_list());
+			}
+			itemDamagePerAttack += modularWeaponModuleDataComponent1.additional_item_damage_per_attack();
+			disableBlockingForSeconds += modularWeaponModuleDataComponent1.additional_seconds_to_disable_blocking();
+		}
+
 		for (ItemStack itemStack : moduleStackList) {
-			ModularWeaponModuleDataComponent modularWeaponModuleDataComponent = itemStack.get(ModularEquipment.MODULAR_WEAPON_MODULE);
-			if (modularWeaponModuleDataComponent != null) {
-				if (!modularWeaponModuleDataComponent.weapon_attribute_identifier().isEmpty()) {
-					weapon_attribute_identifier = modularWeaponModuleDataComponent.weapon_attribute_identifier();
+			ModularWeaponModuleDataComponent modularWeaponModuleDataComponent2 = itemStack.get(ModularEquipment.MODULAR_WEAPON_MODULE);
+			if (modularWeaponModuleDataComponent2 != null) {
+				if (!modularWeaponModuleDataComponent2.weapon_attribute_identifier().isEmpty()) {
+					weapon_attribute_identifier = modularWeaponModuleDataComponent2.weapon_attribute_identifier();
 				}
-				if (!modularWeaponModuleDataComponent.spell_identifier_list().isEmpty()) {
-					spell_identifier_list.addAll(modularWeaponModuleDataComponent.spell_identifier_list());
+				if (!modularWeaponModuleDataComponent2.spell_identifier_list().isEmpty()) {
+					spell_identifier_list.addAll(modularWeaponModuleDataComponent2.spell_identifier_list());
 				}
-				if (!modularWeaponModuleDataComponent.attribute_modifier_list().isEmpty()) {
-					attribute_modifier_list.addAll(modularWeaponModuleDataComponent.attribute_modifier_list());
+				if (!modularWeaponModuleDataComponent2.modular_attribute_modifier_list().isEmpty()) {
+					modular_attribute_modifier_list.addAll(modularWeaponModuleDataComponent2.modular_attribute_modifier_list());
 				}
-				itemDamagePerAttack += modularWeaponModuleDataComponent.additional_item_damage_per_attack();
-				disableBlockingForSeconds += modularWeaponModuleDataComponent.additional_seconds_to_disable_blocking();
+				itemDamagePerAttack += modularWeaponModuleDataComponent2.additional_item_damage_per_attack();
+				disableBlockingForSeconds += modularWeaponModuleDataComponent2.additional_seconds_to_disable_blocking();
 			}
 			if (itemStack.isDamageableItem()) {
 				max_damage += itemStack.getMaxDamage();
 				damage += itemStack.getDamageValue();
 			}
+//			boolean isModularWeaponUsable = modularWeaponModuleDataComponent2.isUsable();
 		}
-		// TODO EAMs
+		ItemAttributeModifiers.Builder itemAttributeModifiersBuilder = ItemAttributeModifiers.builder();
+
+		Map<Holder<Attribute>, ModularAttributeModifierEntry> holderModularAttributeModifierEntryMap = new HashMap<>();
+		for (ModularWeaponModuleDataComponent.ModularAttributeModifier entry : modular_attribute_modifier_list) {
+			ModularAttributeModifierEntry.Builder builder = new ModularAttributeModifierEntry.Builder(holderModularAttributeModifierEntryMap.getOrDefault(entry.attribute(), ModularAttributeModifierEntry.DEFAULT));
+			if (entry.operation() == AttributeModifier.Operation.ADD_VALUE) {
+				builder.addToBaseValue(entry.amount());
+				builder.updateMode(0);
+			} else if (entry.operation() == AttributeModifier.Operation.ADD_MULTIPLIED_BASE) {
+				builder.addToMultipliedBaseValue(entry.amount());
+				builder.updateMode(1);
+			} else if (entry.operation() == AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL) {
+				builder.addToMultipliedTotalValue(entry.amount());
+				builder.updateMode(2);
+			}
+			holderModularAttributeModifierEntryMap.put(entry.attribute(), builder.build());
+		}
+		for (Map.Entry<Holder<Attribute>, ModularAttributeModifierEntry> entry : holderModularAttributeModifierEntryMap.entrySet()) {
+			Optional<ResourceKey<Attribute>> optionalAttributeResourceKey = entry.getKey().unwrapKey();
+			if (optionalAttributeResourceKey.isPresent()) {
+				AttributeModifier.Operation operation;
+				double value;
+				ModularAttributeModifierEntry modularAttributeModifierEntry = entry.getValue();
+				if (modularAttributeModifierEntry.mode < 1) {
+					value = (modularAttributeModifierEntry.base_value * modularAttributeModifierEntry.multiplied_base_value) * modularAttributeModifierEntry.multiplied_total_value;
+					operation = AttributeModifier.Operation.ADD_VALUE;
+				} else if (modularAttributeModifierEntry.mode < 2) {
+					value = modularAttributeModifierEntry.multiplied_base_value * modularAttributeModifierEntry.multiplied_total_value;
+					operation = AttributeModifier.Operation.ADD_MULTIPLIED_BASE;
+				} else {
+					value = modularAttributeModifierEntry.multiplied_total_value;
+					operation = AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL;
+				}
+				Identifier identifier = optionalAttributeResourceKey.get().identifier();
+				itemAttributeModifiersBuilder.add(
+						entry.getKey(),
+						new AttributeModifier(
+								Identifier.fromNamespaceAndPath(identifier.getNamespace(), "base_" + identifier.getPath()),
+								value,
+								operation
+						),
+						equipmentSlotGroup
+				);
+			}
+		}
+		ItemAttributeModifiers itemAttributeModifiers = itemAttributeModifiersBuilder.build();
+		if (itemAttributeModifiers.modifiers().isEmpty()) {
+			resultStack.remove(DataComponents.ATTRIBUTE_MODIFIERS);
+		} else {
+			resultStack.set(DataComponents.ATTRIBUTE_MODIFIERS, itemAttributeModifiers);
+		}
+		// TODO add item name component
+		// 	add Lore component when the equipment is not usable to explain what is missing
 		// 	RPG Inventory compat (can item be used, "can_not_be_two_handed", "needs_to_be_two_handed")
 		resultStack = ModularEquipment.applySpellContainer(resultStack, spell_identifier_list);
 		resultStack = ModularEquipment.applyWeaponAttribute(resultStack, weapon_attribute_identifier);
@@ -333,6 +413,78 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		public Identifier getNoItemIcon() {
 			return this.emptySlotIcon;
 		}
+	}
+
+	public record ModularAttributeModifierEntry(
+			double base_value,
+			double multiplied_base_value,
+			double multiplied_total_value,
+			int mode
+	) {
+		public static ModularAttributeModifierEntry DEFAULT = new ModularAttributeModifierEntry(0.0, 1.0, 1.0, 2);
+
+
+		public static class Builder {
+			double base_value;
+			double multiplied_base_value;
+			double multiplied_total_value;
+			int mode;
+
+			public Builder(ModularAttributeModifierEntry base) {
+				this.base_value = base.base_value();
+				this.multiplied_base_value = base.multiplied_base_value();
+				this.multiplied_total_value = base.multiplied_total_value();
+				this.mode = base.mode();
+			}
+
+			public Builder addToBaseValue(double additionalBaseValue) {
+				this.base_value += additionalBaseValue;
+				return this;
+			}
+
+			public Builder addToMultipliedBaseValue(double additionalMultipliedBaseValue) {
+				this.multiplied_base_value += additionalMultipliedBaseValue;
+				return this;
+			}
+
+			public Builder addToMultipliedTotalValue(double additionalMultipliedTotalValue) {
+				this.multiplied_total_value *= (1 + additionalMultipliedTotalValue);
+				return this;
+			}
+
+			public Builder updateMode(int newMode) {
+				this.mode = Math.min(this.mode, newMode);
+				return this;
+			}
+
+			public ModularAttributeModifierEntry build() {
+				return new ModularAttributeModifierEntry(
+						this.base_value,
+						this.multiplied_base_value,
+						this.multiplied_total_value,
+						this.mode
+				);
+			}
+		}
+
+//		public static final Codec<ModularWeaponModuleDataComponent.ModularAttributeModifier> CODEC = RecordCodecBuilder.create(
+//				instance -> instance.group(
+//								Attribute.CODEC.fieldOf("attribute").forGetter(ModularWeaponModuleDataComponent.ModularAttributeModifier::attribute),
+//								Codec.DOUBLE.fieldOf("amount").forGetter(ModularWeaponModuleDataComponent.ModularAttributeModifier::amount),
+//								AttributeModifier.Operation.CODEC.fieldOf("operation").forGetter(ModularWeaponModuleDataComponent.ModularAttributeModifier::operation)
+//						)
+//						.apply(instance, ModularWeaponModuleDataComponent.ModularAttributeModifier::new)
+//		);
+//		public static final StreamCodec<RegistryFriendlyByteBuf, ModularWeaponModuleDataComponent.ModularAttributeModifier> STREAM_CODEC = StreamCodec.composite(
+//				Attribute.STREAM_CODEC,
+//				ModularWeaponModuleDataComponent.ModularAttributeModifier::attribute,
+//				ByteBufCodecs.DOUBLE,
+//				ModularWeaponModuleDataComponent.ModularAttributeModifier::amount,
+//				AttributeModifier.Operation.STREAM_CODEC,
+//				ModularWeaponModuleDataComponent.ModularAttributeModifier::operation,
+//				ModularWeaponModuleDataComponent.ModularAttributeModifier::new
+//		);
+
 	}
 
 }

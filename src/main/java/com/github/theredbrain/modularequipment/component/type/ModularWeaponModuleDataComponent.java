@@ -1,11 +1,16 @@
 package com.github.theredbrain.modularequipment.component.type;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +18,7 @@ import java.util.List;
 public record ModularWeaponModuleDataComponent(
 		String weapon_attribute_identifier,
 		List<String> spell_identifier_list,
-		List<AttributeModifier> attribute_modifier_list,
+		List<ModularAttributeModifier> modular_attribute_modifier_list,
 		int additional_item_damage_per_attack,
 		float additional_seconds_to_disable_blocking
 ) {
@@ -28,7 +33,7 @@ public record ModularWeaponModuleDataComponent(
 			instance -> instance.group(
 							Codec.STRING.fieldOf("weapon_attribute_identifier").forGetter(ModularWeaponModuleDataComponent::weapon_attribute_identifier),
 							Codec.STRING.listOf().fieldOf("spell_identifier_list").forGetter(ModularWeaponModuleDataComponent::spell_identifier_list),
-							AttributeModifier.CODEC.listOf().fieldOf("attribute_modifier_list").forGetter(ModularWeaponModuleDataComponent::attribute_modifier_list),
+							ModularAttributeModifier.CODEC.listOf().fieldOf("modular_attribute_modifier_list").forGetter(ModularWeaponModuleDataComponent::modular_attribute_modifier_list),
 							Codec.INT.fieldOf("additional_item_damage_per_attack").forGetter(ModularWeaponModuleDataComponent::additional_item_damage_per_attack),
 							Codec.FLOAT.fieldOf("additional_seconds_to_disable_blocking").forGetter(ModularWeaponModuleDataComponent::additional_seconds_to_disable_blocking)
 							)
@@ -39,8 +44,8 @@ public record ModularWeaponModuleDataComponent(
 			ModularWeaponModuleDataComponent::weapon_attribute_identifier,
 			ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()),
 			component -> component.spell_identifier_list,
-			AttributeModifier.STREAM_CODEC.apply(ByteBufCodecs.list()),
-			component -> component.attribute_modifier_list,
+			ModularAttributeModifier.STREAM_CODEC.apply(ByteBufCodecs.list()),
+			component -> component.modular_attribute_modifier_list,
 			ByteBufCodecs.INT,
 			ModularWeaponModuleDataComponent::additional_item_damage_per_attack,
 			ByteBufCodecs.FLOAT,
@@ -85,14 +90,14 @@ public record ModularWeaponModuleDataComponent(
 	public static class Builder {
 		String weapon_attribute_identifier;
 		List<String> spell_identifier_list = new ArrayList<>();
-		List<AttributeModifier> attribute_modifier_list = new ArrayList<>();
+		List<ModularAttributeModifier> modular_attribute_modifier_list = new ArrayList<>();
 		int additional_item_damage_per_attack;
 		float additional_seconds_to_disable_blocking;
 
 		public Builder(ModularWeaponModuleDataComponent base) {
 			this.weapon_attribute_identifier = base.weapon_attribute_identifier();
 			this.spell_identifier_list.addAll(base.spell_identifier_list());
-			this.attribute_modifier_list.addAll(base.attribute_modifier_list());
+			this.modular_attribute_modifier_list.addAll(base.modular_attribute_modifier_list());
 			this.additional_item_damage_per_attack = base.additional_item_damage_per_attack();
 			this.additional_seconds_to_disable_blocking = base.additional_seconds_to_disable_blocking();
 		}
@@ -126,32 +131,34 @@ public record ModularWeaponModuleDataComponent(
 			return new ModularWeaponModuleDataComponent(
 					this.weapon_attribute_identifier,
 					this.spell_identifier_list,
-					this.attribute_modifier_list,
+					this.modular_attribute_modifier_list,
 					this.additional_item_damage_per_attack,
 					this.additional_seconds_to_disable_blocking
 			);
 		}
 	}
 
-//	public record AttributeModifierList(
-//			List<AttributeModifier> attribute_modifier_list
-//	) {
-//		public static final Codec<ModularWeaponComponentDataComponent.AttributeModifierList> CODEC = RecordCodecBuilder.create(
-//				instance -> instance.group(
-//								AttributeModifier.CODEC.listOf().fieldOf("attribute_modifier_list").forGetter(ModularWeaponComponentDataComponent.AttributeModifierList::attribute_modifier_list)
-//						)
-//						.apply(instance, ModularWeaponComponentDataComponent.AttributeModifierList::new)
-//		);
-//		public static final StreamCodec<RegistryFriendlyByteBuf, ModularWeaponComponentDataComponent.AttributeModifierList> STREAM_CODEC = StreamCodec.composite(
-//				ItemStack.OPTIONAL_STREAM_CODEC,
-//				ModularWeaponComponentDataComponent.BladeModules::blade_component,
-//				ItemStack.OPTIONAL_STREAM_CODEC,
-//				ModularWeaponComponentDataComponent.BladeModules::cross_guard_component,
-//				ItemStack.OPTIONAL_STREAM_CODEC,
-//				ModularWeaponComponentDataComponent.BladeModules::pommel_component,
-//				ModularWeaponComponentDataComponent.AttributeModifierList::new
-//		);
-//
-//	}
+	public record ModularAttributeModifier(
+			Holder<Attribute> attribute, double amount, AttributeModifier.Operation operation
+	) {
+		public static final Codec<ModularAttributeModifier> CODEC = RecordCodecBuilder.create(
+				instance -> instance.group(
+								Attribute.CODEC.fieldOf("attribute").forGetter(ModularAttributeModifier::attribute),
+								Codec.DOUBLE.fieldOf("amount").forGetter(ModularAttributeModifier::amount),
+								AttributeModifier.Operation.CODEC.fieldOf("operation").forGetter(ModularAttributeModifier::operation)
+						)
+						.apply(instance, ModularAttributeModifier::new)
+		);
+		public static final StreamCodec<RegistryFriendlyByteBuf, ModularAttributeModifier> STREAM_CODEC = StreamCodec.composite(
+				Attribute.STREAM_CODEC,
+				ModularAttributeModifier::attribute,
+				ByteBufCodecs.DOUBLE,
+				ModularAttributeModifier::amount,
+				AttributeModifier.Operation.STREAM_CODEC,
+				ModularAttributeModifier::operation,
+				ModularAttributeModifier::new
+		);
+
+	}
 
 }

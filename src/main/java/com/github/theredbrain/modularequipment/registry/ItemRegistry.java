@@ -10,6 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -27,8 +28,8 @@ public class ItemRegistry {
 							"bettercombat:sword",
 							new ArrayList<>(),
 							List.of(
-									new AttributeModifier(
-											Identifier.withDefaultNamespace("attack_damage"),
+									new ModularWeaponModuleDataComponent.ModularAttributeModifier(
+											Attributes.ATTACK_DAMAGE,
 											3.0,
 											AttributeModifier.Operation.ADD_VALUE
 									)
@@ -46,8 +47,8 @@ public class ItemRegistry {
 							"",
 							new ArrayList<>(),
 							List.of(
-									new AttributeModifier(
-											Identifier.withDefaultNamespace("attack_damage"),
+									new ModularWeaponModuleDataComponent.ModularAttributeModifier(
+											Attributes.ATTACK_DAMAGE,
 											1.0,
 											AttributeModifier.Operation.ADD_VALUE
 									)
@@ -65,8 +66,8 @@ public class ItemRegistry {
 							"",
 							new ArrayList<>(),
 							List.of(
-									new AttributeModifier(
-											Identifier.withDefaultNamespace("attack_damage"),
+									new ModularWeaponModuleDataComponent.ModularAttributeModifier(
+											Attributes.ATTACK_DAMAGE,
 											1.0,
 											AttributeModifier.Operation.ADD_VALUE
 									)
