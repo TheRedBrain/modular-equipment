@@ -384,9 +384,18 @@ public class ModularEquipmentForgeMenu extends AbstractContainerMenu {
 		// 	RPG Inventory compat (can item be used, "can_not_be_two_handed", "needs_to_be_two_handed")
 		resultStack = ModularEquipment.applySpellContainer(resultStack, spell_identifier_list);
 		resultStack = ModularEquipment.applyWeaponAttribute(resultStack, weapon_attribute_identifier);
-		resultStack.set(DataComponents.MAX_DAMAGE, Math.max(1, max_damage));
-		resultStack.set(DataComponents.WEAPON, new Weapon(itemDamagePerAttack, disableBlockingForSeconds));
-		resultStack.setDamageValue(damage);
+		if (max_damage < 1) {
+			resultStack.remove(DataComponents.MAX_DAMAGE);
+			resultStack.remove(DataComponents.DAMAGE);
+		} else {
+			resultStack.set(DataComponents.MAX_DAMAGE, max_damage);
+			resultStack.setDamageValue(damage);
+		}
+		if (itemDamagePerAttack == 0 && disableBlockingForSeconds == 0.0F) {
+			resultStack.remove(DataComponents.WEAPON);
+		} else {
+			resultStack.set(DataComponents.WEAPON, new Weapon(itemDamagePerAttack, disableBlockingForSeconds));
+		}
 		return resultStack;
 	}
 
