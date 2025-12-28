@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -17,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ItemRegistry {
 
@@ -142,9 +142,9 @@ public class ItemRegistry {
 											ItemStack.EMPTY,
 											ItemStack.EMPTY
 									),
-									Tags.ONE_HANDED_BLADES,
-									Tags.ONE_HANDED_CROSS_GUARDS,
-									Tags.ONE_HANDED_POMMELS,
+									Optional.of(Tags.ONE_HANDED_BLADES),
+									Optional.of(Tags.ONE_HANDED_CROSS_GUARDS),
+									Optional.of(Tags.ONE_HANDED_POMMELS),
 									0
 							)
 					)
@@ -179,9 +179,28 @@ public class ItemRegistry {
 											ItemStack.EMPTY,
 											ItemStack.EMPTY
 									),
-									Tags.ONE_HANDED_BLADES,
-									Tags.ONE_HANDED_CROSS_GUARDS,
-									Tags.ONE_HANDED_POMMELS,
+									Optional.of(Tags.ONE_HANDED_BLADES),
+									Optional.of(Tags.ONE_HANDED_CROSS_GUARDS),
+									Optional.of(Tags.ONE_HANDED_POMMELS),
+									0
+							)
+					)
+	), List.of(CreativeModeTabRegistry.MODULAR_EQUIPMENT_KEY));
+
+	public static ResourceKey<Item> REGULAR_SHORT_SHAFT_WEAPON_KEY = ResourceKey.create(Registries.ITEM, ModularEquipment.identifier("regular_short_shaft_weapon"));
+	public static final Item REGULAR_SHORT_SHAFT_WEAPON = registerItem(REGULAR_SHORT_SHAFT_WEAPON_KEY, new Item(
+			new Item.Properties().setId(REGULAR_SHORT_SHAFT_WEAPON_KEY)
+					.stacksTo(1)
+					.component(ModularEquipment.MODULAR_BLADE_WEAPON,
+							new ModularBladeWeaponDataComponent(
+									new ModularBladeWeaponDataComponent.Modules(
+											ItemStack.EMPTY,
+											ItemStack.EMPTY,
+											ItemStack.EMPTY
+									),
+									Optional.of(Tags.ONE_HANDED_BLADES),
+									Optional.empty(),
+									Optional.of(Tags.ONE_HANDED_POMMELS),
 									0
 							)
 					)

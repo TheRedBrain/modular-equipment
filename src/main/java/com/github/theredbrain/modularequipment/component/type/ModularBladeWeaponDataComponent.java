@@ -11,21 +11,22 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public record ModularBladeWeaponDataComponent(
 		Modules modules,
-		TagKey<Item> blade_items,
-		TagKey<Item> cross_guard_items,
-		TagKey<Item> pommel_items,
+		Optional<TagKey<Item>> blade_items,
+		Optional<TagKey<Item>> cross_guard_items,
+		Optional<TagKey<Item>> pommel_items,
 		int size // used in setting the data component of the modules to determine what item model they use
 ) {
 	public static final ModularBladeWeaponDataComponent DEFAULT = new ModularBladeWeaponDataComponent(new Modules(ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY), null, null, null, 0);
 	public static final Codec<ModularBladeWeaponDataComponent> CODEC = RecordCodecBuilder.create(
 			instance -> instance.group(
 							Modules.CODEC.fieldOf("modules").forGetter(ModularBladeWeaponDataComponent::modules),
-							TagKey.hashedCodec(Registries.ITEM).fieldOf("blade_items").forGetter(ModularBladeWeaponDataComponent::blade_items),
-							TagKey.hashedCodec(Registries.ITEM).fieldOf("cross_guard_items").forGetter(ModularBladeWeaponDataComponent::cross_guard_items),
-							TagKey.hashedCodec(Registries.ITEM).fieldOf("pommel_items").forGetter(ModularBladeWeaponDataComponent::pommel_items),
+							TagKey.hashedCodec(Registries.ITEM).optionalFieldOf("blade_items").forGetter(ModularBladeWeaponDataComponent::blade_items),
+							TagKey.hashedCodec(Registries.ITEM).optionalFieldOf("cross_guard_items").forGetter(ModularBladeWeaponDataComponent::cross_guard_items),
+							TagKey.hashedCodec(Registries.ITEM).optionalFieldOf("pommel_items").forGetter(ModularBladeWeaponDataComponent::pommel_items),
 							Codec.INT.optionalFieldOf("size", 0).forGetter(ModularBladeWeaponDataComponent::size)
 					)
 					.apply(instance, ModularBladeWeaponDataComponent::new)
@@ -33,11 +34,11 @@ public record ModularBladeWeaponDataComponent(
 	public static final StreamCodec<RegistryFriendlyByteBuf, ModularBladeWeaponDataComponent> STREAM_CODEC = StreamCodec.composite(
 			Modules.STREAM_CODEC,
 			component -> component.modules,
-			TagKey.streamCodec(Registries.ITEM),
+			TagKey.streamCodec(Registries.ITEM).apply(ByteBufCodecs::optional),
 			ModularBladeWeaponDataComponent::blade_items,
-			TagKey.streamCodec(Registries.ITEM),
+			TagKey.streamCodec(Registries.ITEM).apply(ByteBufCodecs::optional),
 			ModularBladeWeaponDataComponent::cross_guard_items,
-			TagKey.streamCodec(Registries.ITEM),
+			TagKey.streamCodec(Registries.ITEM).apply(ByteBufCodecs::optional),
 			ModularBladeWeaponDataComponent::pommel_items,
 			ByteBufCodecs.INT,
 			ModularBladeWeaponDataComponent::size,
@@ -45,9 +46,9 @@ public record ModularBladeWeaponDataComponent(
 	);
 
 	public ModularBladeWeaponDataComponent(
-			TagKey<Item> blade_items,
-			TagKey<Item> cross_guard_items,
-			TagKey<Item> pommel_items
+			Optional<TagKey<Item>> blade_items,
+			Optional<TagKey<Item>> cross_guard_items,
+			Optional<TagKey<Item>> pommel_items
 	) {
 		this(
 				new Modules(
@@ -84,9 +85,9 @@ public record ModularBladeWeaponDataComponent(
 
 	public static class Builder {
 		Modules modules;
-		TagKey<Item> blade_items;
-		TagKey<Item> cross_guard_items;
-		TagKey<Item> pommel_items;
+		Optional<TagKey<Item>> blade_items;
+		Optional<TagKey<Item>> cross_guard_items;
+		Optional<TagKey<Item>> pommel_items;
 		int size;
 
 		public Builder(ModularBladeWeaponDataComponent base) {
@@ -103,17 +104,17 @@ public record ModularBladeWeaponDataComponent(
 		}
 
 		public ModularBladeWeaponDataComponent.Builder withBladeItems(TagKey<Item> blade_items) {
-			this.blade_items = blade_items;
+			this.blade_items = Optional.of(blade_items);
 			return this;
 		}
 
 		public ModularBladeWeaponDataComponent.Builder withCrossGuardItems(TagKey<Item> cross_guard_items) {
-			this.cross_guard_items = cross_guard_items;
+			this.cross_guard_items = Optional.of(cross_guard_items);
 			return this;
 		}
 
 		public ModularBladeWeaponDataComponent.Builder withPommelItems(TagKey<Item> pommel_items) {
-			this.pommel_items = pommel_items;
+			this.pommel_items = Optional.of(pommel_items);
 			return this;
 		}
 
