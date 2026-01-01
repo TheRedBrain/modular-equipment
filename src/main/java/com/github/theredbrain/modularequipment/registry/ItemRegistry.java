@@ -2,6 +2,7 @@ package com.github.theredbrain.modularequipment.registry;
 
 import com.github.theredbrain.modularequipment.ModularEquipment;
 import com.github.theredbrain.modularequipment.component.type.ModularBladeWeaponDataComponent;
+import com.github.theredbrain.modularequipment.component.type.ModularShaftWeaponDataComponent;
 import com.github.theredbrain.modularequipment.component.type.ModularWeaponModuleDataComponent;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.Registry;
@@ -191,16 +192,14 @@ public class ItemRegistry {
 	public static final Item REGULAR_SHORT_SHAFT_WEAPON = registerItem(REGULAR_SHORT_SHAFT_WEAPON_KEY, new Item(
 			new Item.Properties().setId(REGULAR_SHORT_SHAFT_WEAPON_KEY)
 					.stacksTo(1)
-					.component(ModularEquipment.MODULAR_BLADE_WEAPON,
-							new ModularBladeWeaponDataComponent(
-									new ModularBladeWeaponDataComponent.Modules(
-											ItemStack.EMPTY,
+					.component(ModularEquipment.MODULAR_SHAFT_WEAPON,
+							new ModularShaftWeaponDataComponent(
+									new ModularShaftWeaponDataComponent.Modules(
 											ItemStack.EMPTY,
 											ItemStack.EMPTY
 									),
-									Optional.of(Tags.ONE_HANDED_BLADES),
-									Optional.empty(),
-									Optional.of(Tags.ONE_HANDED_POMMELS),
+									Optional.of(Tags.SHORT_SHAFT_HEADS),
+									Optional.of(Tags.SHORT_SHAFT_POMMELS),
 									0
 							)
 					)
